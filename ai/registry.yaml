@@ -1,0 +1,149 @@
+version: 1
+project: herdr.dev
+updated: 2026-11-10
+language:
+  documentation: pt-BR
+  code_and_identifiers: en
+
+canonical:
+  instructions: AGENTS.md
+  agents: ai/agents
+  rules: ai/rules
+  prompts: ai/prompts
+  skills: ai/skills
+  workflows: ai/workflows
+  tasks: tasks
+  governance: governance
+  reports: reports
+
+flow:
+  - spec
+  - adr
+  - plan
+  - task
+  - implementation
+  - tests
+  - evidence
+
+gates:
+  - id: G0
+    name: Intake
+    artifact: docs/specifications
+    blocks: [spec]
+  - id: G1
+    name: Spec approved
+    artifact: docs/specifications
+    blocks: [adr, plan]
+  - id: G2
+    name: Architecture/ADR approved
+    artifact: docs/adr
+    blocks: [plan]
+  - id: G3
+    name: Plan approved
+    artifact: docs/plans
+    blocks: [task]
+  - id: G4
+    name: Task scope authorized
+    artifact: tasks
+    blocks: [implementation]
+  - id: G5
+    name: Quality gates green
+    artifact: reports
+    blocks: [merge]
+  - id: G6
+    name: Evidence recorded
+    artifact: reports
+    blocks: [done]
+
+roles:
+  - id: architect
+    name: Architect
+    canonical: ai/agents/architect.md
+    mode: primary
+    permissions: { read: allow, edit: ask, shell: ask, delegate: allow }
+    outputs: [spec, adr, plan]
+  - id: implementer
+    name: Implementer
+    canonical: ai/agents/implementer.md
+    mode: primary
+    permissions: { read: allow, edit: allow, shell: ask, delegate: deny }
+    outputs: [code, tests, evidence]
+  - id: tester
+    name: Tester
+    canonical: ai/agents/tester.md
+    mode: subagent
+    permissions: { read: allow, edit: allow, shell: allow, delegate: deny }
+    outputs: [test_plan, tests, test_report]
+  - id: reviewer
+    name: Reviewer
+    canonical: ai/agents/reviewer.md
+    mode: subagent
+    permissions: { read: allow, edit: deny, shell: ask, delegate: deny }
+    outputs: [review_findings]
+  - id: security-reviewer
+    name: Security Reviewer
+    canonical: ai/agents/security-reviewer.md
+    mode: subagent
+    permissions: { read: allow, edit: deny, shell: ask, delegate: deny }
+    outputs: [security_findings]
+  - id: devops
+    name: DevOps
+    canonical: ai/agents/devops.md
+    mode: primary
+    permissions: { read: allow, edit: allow, shell: ask, delegate: deny }
+    outputs: [docker, compose, ci, evidence]
+  - id: docs-writer
+    name: Docs Writer
+    canonical: ai/agents/docs-writer.md
+    mode: subagent
+    permissions: { read: allow, edit: allow, shell: deny, delegate: deny }
+    outputs: [documentation]
+  - id: orchestrator
+    name: Orchestrator
+    canonical: ai/agents/orchestrator.md
+    mode: primary
+    permissions: { read: allow, edit: deny, shell: allow, delegate: allow }
+    outputs: [delegation_plan, cycle_report]
+
+adapters:
+  opencode:
+    version_tested: "1.19.0"
+    instructions: AGENTS.md
+    agents: .opencode/agents
+    commands: .opencode/commands
+    skills: .opencode/skills
+    config: .opencode/opencode.json
+  claude:
+    version_tested: null
+    instructions: CLAUDE.md
+    agents: .claude/agents
+    commands: .claude/commands
+    skills: .claude/skills
+    note: "CLI ausente no ambiente; não validado em runtime."
+  codex:
+    version_tested: "0.163.0"
+    instructions: AGENTS.md
+    prompts: .codex/prompts
+    rules: .codex/rules
+    note: "Executar com --no-daemon dentro do Herdr."
+  copilot:
+    version_tested: null
+    instructions: .github/copilot-instructions.md
+    agents: .github/agents
+    instructions_dir: .github/instructions
+    prompts: .github/prompts
+    note: "Custom agents/instructions são validação estrutural, não runtime."
+
+herdr:
+  core_version: "0.1.19"
+  app_version: "0.1.14"
+  template_prefix: gfm-
+  templates_source: .herdr/templates
+  templates_target: "%APPDATA%\\herdr-core\\templates"
+  install_script: .herdr/scripts/install-templates.ps1
+  workflows: .herdr/workflows
+
+reports:
+  dir: reports
+  pattern: "RELATORIO-{yyyy-MM-dd-HHmmss}-{ciclo}.txt"
+  final: reports/RELATORIO-FINAL-TEMPLATE-HERDR.txt

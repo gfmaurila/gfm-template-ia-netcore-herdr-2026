@@ -8,7 +8,9 @@ Leia `README.md`, `docs/README.md` e os ADRs antes de propor mudanças.
 - Projeto: **GFM.Template** (template pessoal .NET + IA, independente de empresa/cliente).
 - Workspace exclusivo: `C:\Work\dev\herdr.dev`.
 - Ferramenta principal: **OpenCode** (1.19.0) dentro do **Herdr** (hc 0.1.19 / app 0.1.14).
-- Estado: documentação (Fases 1–2). **Sem código C#, sem Git, sem dependências instaladas.**
+- Ferramentas suportadas: OpenCode, Claude Code, Codex CLI e GitHub Copilot (ver `ai/registry.yaml`).
+- Estado: documentação (Fases 1–2) + camada de engenharia assistida por IA (Ciclos 1–6).
+  **Sem código C# nesta fase.**
 
 ## 2. Regras inegociáveis (bloqueantes)
 
@@ -28,11 +30,14 @@ Leia `README.md`, `docs/README.md` e os ADRs antes de propor mudanças.
 
 - Windows 11 Pro 10.0.26300 (AMD64); PowerShell 5.1 e PowerShell 7.6.9.
 - .NET SDK 10.0.402 (único); runtimes 8.0.21 e 10.0.13; sem workloads; sem `global.json`.
-- Git 2.55.0.windows.5; `gitconfig` global definido; diretório **não** é repositório.
+- Git 2.55.0.windows.5; repositório local na branch `main`, remoto
+  `https://github.com/gfmaurila/gfm-template-ia-netcore-herdr-2026.git`.
 - Docker CLI 29.8.2, porém **daemon parado** (`com.docker.service` = Stopped).
 - Node 24.20.0 / npm 11.19.0 / OpenCode 1.19.0 / Codex CLI 0.163.0.
+- Claude Code CLI **não instalado** (adaptador documentado, não validado em runtime).
+- `gh` CLI **não autenticado**; push depende do credential helper `manager`.
 - Nenhuma variável de credencial de IA no ambiente.
-- Conteúdo do workspace: apenas `leia.txt` e o manual do Herdr.
+- Conteúdo do workspace: documentação .NET + IA, camada de agentes e `leia.txt`/manual.
 
 Se algum fato mudar, atualize esta seção com data e evidência — nunca presuma.
 
@@ -124,3 +129,67 @@ Uma entrega só é aceita quando:
 Pare e consulte o responsável quando houver: ambiguidade de requisito, escolha de banco,
 autenticação, licença, versão de pacote relevante, custo de IA, ou qualquer ação irreversível.
 Registre a dúvida em `docs/plans/open-questions.md` em vez de presumir aprovação.
+
+## 10. Camada de engenharia assistida por IA
+
+Este repositório é o **template de engenharia assistida por IA** orquestrado pelo Herdr.
+
+- **Fonte canônica:** `AGENTS.md` (instruções) + `ai/` (agentes, skills, workflows, regras, prompts).
+- **Adaptadores:** `.opencode/`, `.claude/`, `.codex/`, `.github/` apenas especializam a fonte
+  canônica. Não duplicam política; referenciam `AGENTS.md` e `ai/`.
+- **Fluxo obrigatório:** `SPEC → ADR → PLAN → TASK → IMPLEMENTAÇÃO → TESTES → EVIDÊNCIAS`.
+- **Papéis:** Architect, Implementer, Tester, Reviewer, Security Reviewer, DevOps, Docs Writer e
+  Orchestrator (ver `ai/agents/` e `ai/registry.yaml`).
+- **Regras:** `ai/rules/` é a fonte executável; `governance/` publica a política para humanos.
+- **Prompts:** `ai/prompts/PRM-NNN@versao.md`; `prompts.md` é o índice.
+- **Tasks:** `tasks/` usa o formato único de `tasks/TASK-TEMPLATE.md`.
+- **Relatórios:** toda execução de ciclo gera `reports/RELATORIO-AAAA-MM-DD-HHMMSS-NOME.txt`.
+
+## 11. Herdr (orquestração)
+
+- Versão validada: `hc 0.1.19`; templates em `%APPDATA%\herdr-core\templates\<nome>.md`.
+- Templates deste template usam prefixo **`gfm-`** (ex.: `gfm-architect`).
+- Instalação controlada: `.herdr/scripts/install-templates.ps1` (copia, não instala globalmente).
+- Execução: `hc run --bg --name <papel> --cwd <repo> gfm-<papel> "<tarefa>"`.
+- Acompanhamento: `hc wait --children`, `hc read`, `hc send`, `hc get`; limpeza: `hc kill`/`hc rm`.
+- Codex dentro do Herdr **deve** rodar com `--no-daemon`.
+- Um Space por projeto; agentes não apontam para repositórios de clientes.
+
+## 12. Catálogo de agentes e adaptadores
+
+| Papel | Canônico | OpenCode | Claude Code | Codex | Copilot |
+|---|---|---|---|---|---|
+| Architect | `ai/agents/architect.md` | `.opencode/agents/architect.md` | `.claude/agents/architect.md` | `.codex/prompts/architect.md` | `.github/agents/architect.agent.md` |
+| Implementer | `ai/agents/implementer.md` | `.opencode/agents/implementer.md` | `.claude/agents/implementer.md` | `.codex/prompts/implementer.md` | `.github/agents/implementer.agent.md` |
+| Tester | `ai/agents/tester.md` | `.opencode/agents/tester.md` | `.claude/agents/tester.md` | `.codex/prompts/tester.md` | `.github/agents/tester.agent.md` |
+| Reviewer | `ai/agents/reviewer.md` | `.opencode/agents/reviewer.md` | `.claude/agents/reviewer.md` | `.codex/prompts/reviewer.md` | `.github/agents/reviewer.agent.md` |
+| Security Reviewer | `ai/agents/security-reviewer.md` | `.opencode/agents/security-reviewer.md` | `.claude/agents/security-reviewer.md` | `.codex/prompts/security-reviewer.md` | `.github/agents/security-reviewer.agent.md` |
+| DevOps | `ai/agents/devops.md` | `.opencode/agents/devops.md` | `.claude/agents/devops.md` | `.codex/prompts/devops.md` | `.github/agents/devops.agent.md` |
+| Docs Writer | `ai/agents/docs-writer.md` | `.opencode/agents/docs-writer.md` | `.claude/agents/docs-writer.md` | `.codex/prompts/docs-writer.md` | `.github/agents/docs-writer.agent.md` |
+| Orchestrator | `ai/agents/orchestrator.md` | `.opencode/agents/orchestrator.md` | `.claude/agents/orchestrator.md` | `.codex/prompts/orchestrator.md` | `.github/agents/orchestrator.agent.md` |
+
+Regras de adaptação:
+
+1. Mudança de comportamento começa em `ai/` e é propagada aos adaptadores no mesmo ciclo.
+2. Formato de frontmatter segue a versão **instalada** de cada ferramenta; divergência é registrada
+   em `docs/ai/multi-tool-matrix.md`.
+3. Ferramenta indisponível (ex.: Claude Code CLI ausente) permanece documentada, mas **não
+   validada em runtime**.
+
+## 13. Relatórios, evidências e Git
+
+- Formato: `reports/RELATORIO-AAAA-MM-DD-HHMMSS-NOME-DO-CICLO.txt`.
+- Conteúdo mínimo: objetivo, agentes, atividades, arquivos, comandos, validações, erros, decisões,
+  riscos, status, branch/publicação e próximos passos.
+- Evidência > afirmação: comandos e saídas reais; distinguir **verificado**, **inferido** e
+  **não validado**.
+- Commits: mensagem `tipo(escopo): descricao` (ex.: `feat(ai): fundacao canonica`).
+- Proibido `git push --force`, reescrita de histórico publicado ou commit de segredos.
+- Se o push falhar: preservar o commit local e interromper para diagnóstico.
+
+## 14. Limites desta fase (template de agentes)
+
+- **Não** gerar aplicação C#, `src/` executável ou migrations nesta fase.
+- **Não** instalar ferramentas globalmente, alterar PATH permanente ou publicar pacotes.
+- **Não** copiar conteúdo de clientes nem material proprietário do repositório de referência.
+- **Não** declarar homologação sem as validações do Ciclo 6 executadas.

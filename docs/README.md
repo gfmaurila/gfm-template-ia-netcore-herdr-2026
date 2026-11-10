@@ -21,8 +21,11 @@
 | [`testing/`](testing/strategy.md) | Estratégia de testes e Testcontainers |
 | [`security/`](security/security-baseline.md) | Baseline de segurança e proteção de dados em IA |
 | [`devops/`](devops/local-development.md) | Desenvolvimento local, Docker, CI/CD |
-| [`ai/`](ai/opencode-herdr.md) | OpenCode no Herdr e governança de prompts |
+| [`ai/`](ai/opencode-herdr.md) | OpenCode no Herdr, matriz multi-ferramenta e governança de prompts |
 | [`blueprints/`](blueprints/api.md) | Extensões: API, Worker/Batch, compostas, IA |
+| [`../ai/`](../ai/README.md) | Fonte canônica de agentes, regras, prompts, skills e workflows |
+| [`../tasks/`](../tasks/TASK-TEMPLATE.md) | TASKs em formato único |
+| [`../governance/`](../governance/) | Política publicada para humanos |
 
 ## Status
 
@@ -32,6 +35,7 @@
 | 2 — Documentação e planejamento | Concluída |
 | 3 — Arquitetura | Proposta; aguarda aprovação |
 | 4+ — Implementação | **Bloqueada** até aprovação explícita |
+| Camada de IA (Ciclos 1–6) | Em construção; ver `reports/` |
 
 ## Princípios
 

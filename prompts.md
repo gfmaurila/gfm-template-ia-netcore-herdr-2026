@@ -1,102 +1,34 @@
-# prompts.md — Biblioteca de prompts versionados
+# prompts.md — índice de prompts versionados
 
-Prompts reutilizáveis para OpenCode no Herdr. Formato: `PRM-NNN` + versão semântica.
-Nunca inclua segredos, PII, dados de cliente ou trechos de código proprietário nos prompts.
+A biblioteca de prompts vive em [`ai/prompts/`](ai/prompts/README.md), no formato
+`PRM-NNN@versao.md`. Este arquivo é apenas o índice.
 
-Convenções:
-- Toda execução de agente deve citar o ID + versão (ex.: `PRM-002@1.0.0`).
-- Prompts são versionados em Git (quando o repositório existir) e em `prompts/`.
-- Mudança de comportamento = incremento de versão + nota em `docs/ai/prompt-governance.md`.
-- Saída deve distinguir **fato verificado**, **inferência** e **pendência**.
+## Convenções
 
----
+- Toda execução de agente cita o ID + versão (ex.: `PRM-002@1.0.0`).
+- Mudança de comportamento exige nova versão + nota em
+  [`docs/ai/prompt-governance.md`](docs/ai/prompt-governance.md).
+- Nunca incluir segredos, tokens, PII, dados de cliente ou código proprietário.
+- Saída distingue **[verificado]**, **[inferido]** e **[não validado]**.
+- Prompt não concede permissão que `AGENTS.md` e `ai/rules/` não concedem.
 
-## PRM-001@1.0.0 — Descoberta somente leitura
+## Catálogo
 
-**Objetivo:** diagnosticar o workspace sem alterar nada.
+| ID | Versão | Papel | Objetivo |
+|---|---|---|---|
+| PRM-001 | 1.0.0 | Architect | Descoberta somente leitura |
+| PRM-002 | 1.0.0 | Implementer | Implementar unidade com testes |
+| PRM-003 | 1.0.0 | Tester | Integração com Testcontainers |
+| PRM-004 | 1.0.0 | Reviewer | Revisão de código |
+| PRM-005 | 1.0.0 | DevOps | DevOps local-first |
+| PRM-006 | 1.0.0 | Architect | ADR |
+| PRM-007 | 1.0.0 | Architect | IA opcional e segura |
+| PRM-008 | 1.0.0 | Architect | Blueprint de extensão |
+| PRM-009 | 1.0.0 | Architect | Escrever SPEC |
+| PRM-010 | 1.0.0 | Architect | Escrever PLAN |
+| PRM-011 | 1.0.0 | Architect | Decompor em TASKs |
+| PRM-012 | 1.0.0 | Docs Writer | Atualizar documentação |
+| PRM-013 | 1.0.0 | Security Reviewer | Revisão de segurança |
+| PRM-014 | 1.0.0 | Orchestrator | Orquestrar no Herdr |
 
-```text
-Atue como arquiteto. Faça uma auditoria SOMENTE LEITURA do workspace indicado.
-Regras: não criar/alterar/excluir arquivos; não inicializar Git; não instalar nada;
-não executar comandos destrutivos; não acessar projetos de referência de clientes.
-Verifique: SO, PowerShell, .NET SDK/runtimes, Git, Docker (CLI e daemon), Node, OpenCode,
-Herdr; conteúdo do diretório; estado do Git; documentos realmente disponíveis.
-Saída: tabela componente/versão/status/observação, riscos e pendências.
-Classifique cada afirmação como [verificado], [inferido] ou [não verificado].
-```
-
-## PRM-002@1.0.0 — Implementar unidade com testes
-
-**Objetivo:** implementar uma unidade pequena, com evidência.
-
-```text
-Implemente apenas: <descrição da unidade>.
-Contexto: <arquivo/ADR/spec>. Siga a arquitetura aprovada (Domain/Application/
-Infrastructure/Host.Api) e as regras de dependência.
-Requisitos: incluir testes aplicáveis; não introduzir segredos/PII; não instalar
-pacotes sem aprovação; não alterar documentação de decisão sem ADR.
-Ao final, execute build e testes reais e reporte:
-(1) o que passou, (2) o que falhou, (3) o que não pôde ser validado.
-Proibido declarar sucesso sem saída de execução.
-```
-
-## PRM-003@1.0.0 — Testes de integração com Testcontainers
-
-```text
-Escreva testes de integração para <componente> usando Testcontainers e PostgreSQL.
-Regras: banco efêmero por execução; nenhuma dependência de banco corporativo/compartilhado;
-limpeza garantida mesmo em falha (Ryuk); migrations aplicadas no fixture; sem dados reais.
-Cubra: caminho felizes, erros esperados e contrato HTTP.
-Saída: arquivos criados + comandos executados + resultado real.
-```
-
-## PRM-004@1.0.0 — Revisão de código
-
-```text
-Revise o diff atual como revisor sênior. Verifique: corretude, segurança (segredos/PII/
-injeção), limites de camada, concorrência, async/CancellationToken, testabilidade,
-observabilidade e complexidade acidental.
-Classifique achados em: bloqueante, recomendado, opcional. Cite arquivo:linha.
-Não reescreva o código; produza parecer objetivo.
-```
-
-## PRM-005@1.0.0 — DevOps local-first
-
-```text
-Proponha/ajuste Dockerfile multi-stage, Compose local e workflow GitHub Actions.
-Requisitos: restore, build, lint (dotnet format), testes unitários/arquitetura/integração
-com Testcontainers e build da imagem; segredos fora do repositório; sem serviços
-corporativos; cache de NuGet; artefatos de teste.
-Local first -> container first -> cloud ready -> AWS target (documentar, não publicar).
-Saída: arquivos + evidência de execução local; nada publicado sem aprovação.
-```
-
-## PRM-006@1.0.0 — ADR
-
-```text
-Escreva um ADR para a decisão: <título>.
-Formato: Contexto, Decisão, Alternativas consideradas, Consequências (positivas/negativas),
-Riscos, Status (proposto/aceito/substituído), Data.
-Seja específico e evite justificativas genéricas. Se faltar informação, liste perguntas
-em vez de presumir aprovação.
-```
-
-## PRM-007@1.0.0 — IA opcional e segura
-
-```text
-Projete a integração de IA para <caso de uso> respeitando: interfaces na Application,
-adaptador na Infrastructure, provider desligado por padrão, timeouts, limite de custo,
-fallback, logs sem PII e prompts versionados.
-O template básico deve funcionar sem credenciais de IA.
-Saída: contratos, fluxo, riscos de privacidade, critérios de teste (incluindo ausência
-de configuração) e o que NÃO será implementado agora.
-```
-
-## PRM-008@1.0.0 — Blueprint de extensão
-
-```text
-Descreva um blueprint para <API | Worker/Batch | aplicação composta | aplicação com IA>.
-Inclua: quando usar, estrutura de projetos, dependências, configuração, testes, riscos e
-critérios para NÃO criar o projeto agora. Evite projetos vazios: só materialize com
-necessidade concreta aprovada.
-```
+Detalhes e texto completo: [`ai/prompts/README.md`](ai/prompts/README.md).

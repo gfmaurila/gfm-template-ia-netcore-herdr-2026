@@ -3,8 +3,9 @@
 Template pessoal, reutilizável e independente de empresa/cliente para aplicações .NET
 modernas, desenvolvido no workspace `C:\Work\dev\herdr.dev` com OpenCode dentro do Herdr.
 
-> **Status atual: Fase 1 (descoberta) e Fase 2 (documentação) concluídas.**
-> Nenhum código C# foi gerado. Git não foi inicializado. Nenhuma dependência foi instalada.
+> **Status atual: Fase 1 (descoberta) e Fase 2 (documentação) concluídas; camada de
+> engenharia assistida por IA (Ciclos 1–6) em construção.**
+> Nenhum código C# foi gerado. Nenhuma dependência de aplicação foi instalada.
 > A implementação só começa após aprovação explícita.
 
 ## Objetivo
@@ -43,45 +44,45 @@ Fornecer uma base profissional para novos projetos .NET com:
 Versões e pacotes definitivos serão fixados via `global.json` + Central Package Management,
 após aprovação (ver `docs/adr/0005-central-build-and-packages.md`).
 
-## Árvore planejada
+## Árvore atual e planejada
 
 ```text
 herdr.dev/
-├─ AGENTS.md                 # instruções para OpenCode e agentes
-├─ prompts.md                # biblioteca de prompts versionados
+├─ AGENTS.md                 # fonte canônica de instruções
+├─ CLAUDE.md                 # adaptador Claude Code
+├─ prompts.md                # índice de prompts versionados
 ├─ README.md
+├─ ai/                       # fonte canônica: agents, rules, prompts, skills, workflows
+│  └─ registry.yaml
+├─ .opencode/                # adaptador OpenCode (agents, commands, skills)
+├─ .claude/                  # adaptador Claude Code (agents, commands, skills)
+├─ .codex/                   # adaptador Codex (prompts, rules)
+├─ .github/                  # adaptador Copilot + workflows de CI
+├─ .herdr/                   # templates, workflows e scripts de instalação
+├─ tasks/                    # TASKs em formato único
+├─ templates/                # modelos de spec, ADR, plano, task, teste, security review
+├─ governance/               # política publicada para humanos
+├─ reports/                  # relatórios e evidências por ciclo
+├─ docs/                     # ver docs/README.md
+├─ src/                      # Fase 4+ (implementação)
+├─ tests/                    # Fase 4+ (implementação)
+├─ deploy/                   # Fase 5 (Docker/Compose)
 ├─ global.json               # pin do SDK (implementação)
 ├─ Directory.Build.props     # propriedades comuns (implementação)
 ├─ Directory.Packages.props  # versões centrais de pacotes (implementação)
-├─ .editorconfig             # estilo (implementação)
-├─ .gitignore / .gitattributes
-├─ docs/                     # ver docs/README.md
-├─ src/
-│  ├─ Gfm.Template.Domain/
-│  ├─ Gfm.Template.Application/
-│  ├─ Gfm.Template.Infrastructure/
-│  └─ Gfm.Template.Host.Api/
-├─ tests/
-│  ├─ Gfm.Template.Domain.Tests/
-│  ├─ Gfm.Template.Application.Tests/
-│  ├─ Gfm.Template.Architecture.Tests/
-│  └─ Gfm.Template.Api.IntegrationTests/
-├─ deploy/
-│  ├─ api.Dockerfile
-│  └─ compose.yaml
-├─ prompts/                  # prompts versionados (implementação)
-└─ .github/workflows/ci.yml
+└─ .editorconfig             # estilo (implementação)
 ```
 
-Os diretórios `src/`, `tests/`, `deploy/`, `prompts/` e `.github/` **ainda não existem**;
-são o resultado da Fase 3+ e dependem de aprovação.
+Os diretórios `src/`, `tests/` e `deploy/` **ainda não existem**; são resultado da Fase 3+
+e dependem de aprovação.
 
 ## Documentação
 
 Comece por [`docs/README.md`](docs/README.md). Destaques:
 
 - [`AGENTS.md`](AGENTS.md) — regras e papéis dos agentes.
-- [`prompts.md`](prompts.md) — prompts versionados.
+- [`ai/README.md`](ai/README.md) — fonte canônica da camada de IA.
+- [`prompts.md`](prompts.md) — índice de prompts versionados.
 - [`docs/architecture/overview.md`](docs/architecture/overview.md) — arquitetura.
 - [`docs/plans/implementation-plan.md`](docs/plans/implementation-plan.md) — plano e gates.
 - [`docs/plans/open-questions.md`](docs/plans/open-questions.md) — decisões pendentes.
@@ -94,7 +95,7 @@ Comece por [`docs/README.md`](docs/README.md). Destaques:
 | OS | Windows 11 Pro 10.0.26300 (x64) | OK |
 | Windows PowerShell | 5.1.26100.9818 | PowerShell 7.6.9 também disponível |
 | .NET SDK | 10.0.402 | Sem SDK 8 (apenas runtime 8.0.21) |
-| Git | 2.55.0.windows.5 | Diretório **não** é repositório Git |
+| Git | 2.55.0.windows.5 | Repositório na branch `main` com remoto no GitHub |
 | Docker CLI | 29.8.2 | Daemon **não operacional** |
 | Node.js / npm | 24.20.0 / 11.19.0 | OK |
 | OpenCode | 1.19.0 | OK |

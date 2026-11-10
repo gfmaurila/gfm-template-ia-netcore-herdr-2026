@@ -1,0 +1,120 @@
+RELATORIO-2026-11-10-154818-CICLO-1-FUNDACAO-CANONICA.txt
+================================================================================
+PROJETO: GFM.Template (herdr.dev)
+CICLO: 1 - Fundacao canonica
+DATA: 2026-11-10 15:48:18 (local)
+BRANCH: main
+AGENTES: Orchestrator, Architect, Docs Writer
+================================================================================
+
+1. OBJETIVO
+--------------------------------------------------------------------------------
+Criar a fonte canonica independente de ferramenta para a camada de engenharia
+assistida por IA: instrucoes, agentes, regras, prompts e indices, sem gerar
+codigo C# e sem instalar ferramentas globalmente.
+
+2. ATIVIDADES
+--------------------------------------------------------------------------------
+- AGENTS.md: secoes 1 e 3 atualizadas com fatos verificados (repositorio Git,
+  ferramentas suportadas, Claude Code ausente); secoes 10-14 acrescentadas
+  (camada de IA, Herdr, catalogo de adaptadores, relatorios/Git, limites).
+- CLAUDE.md criado como adaptador fino que referencia AGENTS.md e ai/.
+- ai/README.md, ai/registry.yaml, ai/agents/README.md, ai/rules/README.md,
+  ai/prompts/README.md, ai/skills/README.md, ai/workflows/README.md criados.
+- 8 agentes canonicos criados com frontmatter id/mode/permissions/inputs/
+  outputs/acceptance.
+- 6 arquivos de regras criados (architecture, coding-standards, quality-gates,
+  security, ai-usage, herdr-operations) com IDs rastreaveis.
+- 14 prompts versionados criados em ai/prompts/PRM-NNN@1.0.0.md.
+- prompts.md convertido em indice; README.md e docs/README.md atualizados.
+- tasks/TASK-TEMPLATE.md criado (formato unico referenciado pelo AGENTS.md).
+- governance/architecture/dependency-policy.md e docs/ai/multi-tool-matrix.md
+  criados para manter integridade de links.
+
+3. ARQUIVOS
+--------------------------------------------------------------------------------
+Modificados:
+- AGENTS.md
+- README.md
+- docs/README.md
+- prompts.md
+
+Criados:
+- CLAUDE.md
+- tasks/TASK-TEMPLATE.md
+- governance/architecture/dependency-policy.md
+- docs/ai/multi-tool-matrix.md
+- ai/README.md
+- ai/registry.yaml
+- ai/agents/README.md
+- ai/agents/architect.md
+- ai/agents/implementer.md
+- ai/agents/tester.md
+- ai/agents/reviewer.md
+- ai/agents/security-reviewer.md
+- ai/agents/devops.md
+- ai/agents/docs-writer.md
+- ai/agents/orchestrator.md
+- ai/rules/README.md
+- ai/rules/architecture.md
+- ai/rules/coding-standards.md
+- ai/rules/quality-gates.md
+- ai/rules/security.md
+- ai/rules/ai-usage.md
+- ai/rules/herdr-operations.md
+- ai/prompts/README.md
+- ai/prompts/PRM-001@1.0.0.md .. PRM-014@1.0.0.md (14 arquivos)
+- ai/skills/README.md
+- ai/workflows/README.md
+
+4. COMANDOS E VALIDACOES
+--------------------------------------------------------------------------------
+- Listagem de ai/ (32 arquivos): OK.
+- Verificacao de frontmatter dos 8 agentes (id == nome do arquivo): 8/8 OK.
+- Contagem de delimitadores de frontmatter nos 14 prompts (2 por arquivo): OK.
+- Verificacao de links relativos em AGENTS.md, README.md, CLAUDE.md, prompts.md,
+  docs/README.md, tasks/TASK-TEMPLATE.md, ai/**/*.md, docs/ai/multi-tool-matrix.md
+  e governance/architecture/dependency-policy.md: "OK: todos os links relativos
+  existem".
+- git status: 4 modificados + CLAUDE.md/ai/ nao rastreados antes do commit.
+
+5. ERROS E CORRECOES
+--------------------------------------------------------------------------------
+- Primeira gravacao de PRM-004@1.0.0.md e PRM-008@1.0.0.md saiu com linhas de
+  frontmatter indevidas no titulo. Arquivos regravados e verificados (titulo e
+  delimitadores corretos).
+
+6. O QUE NAO PODE SER VALIDADO
+--------------------------------------------------------------------------------
+- ai/registry.yaml nao foi validado por parser YAML (modulo PyYAML ausente;
+  instalacao global proibida nesta fase). Validacao apenas estrutural/manual.
+- Adaptador Claude Code nao validado em runtime (CLI ausente).
+- Formatos de subagents/skills do Codex e schema OpenCode V1/V2: pendentes para
+  o Ciclo 2.
+- Nenhum build/teste executado: nao ha codigo de aplicacao nesta fase.
+
+7. DECISOES
+--------------------------------------------------------------------------------
+- Manter IDs PRM-001..008 existentes e acrescentar PRM-009..014, evitando
+  renumeracao que quebraria referencias.
+- Criar READMEs de skills/workflows e a matriz multi-ferramenta neste ciclo para
+  nao commitar links relativos quebrados.
+- Nao instalar dependencias (inclusive parser YAML) sem aprovacao.
+
+8. RISCOS
+--------------------------------------------------------------------------------
+- Duplicacao futura entre ai/ e adaptadores: mitigada por regra de fonte canonica.
+- registry.yaml sem validacao automatica: adicionar verificacao no CI no Ciclo 5.
+- Claude Code e Copilot sem validacao runtime: registrar como "nao validado".
+
+9. STATUS
+--------------------------------------------------------------------------------
+Concluido o conteudo do Ciclo 1. Commit e push pendentes no momento da geracao
+deste relatorio.
+
+10. PROXIMOS PASSOS
+--------------------------------------------------------------------------------
+- Commit: feat(ai): fundacao canonica.
+- Push para origin/main e registro do SHA.
+- Ciclo 2: adaptadores OpenCode/Claude/Codex/Copilot e validacao de formato.
+================================================================================
