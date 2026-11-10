@@ -1,4 +1,4 @@
-# Homologação do template (Ciclo 6)
+# Homologação do template (Ciclos 6–7)
 
 Data: 2026-11-10. Escopo: template documental e camada de agentes; **sem código C#**.
 
@@ -13,6 +13,7 @@ Data: 2026-11-10. Escopo: template documental e camada de agentes; **sem código
 | 5 modelos + TASK | `templates/` e `tasks/TASK-TEMPLATE.md` |
 | 6 documentos de governança | `governance/` |
 | 8 templates Herdr | `hc templates` lista `gfm-*` |
+| Execução de agente primário via Herdr | `hc run ... run-agent.ps1 -Role architect` respondeu `OK`, exit 0 |
 | Validação estrutural | `python scripts/validate-template.py` exit 0 |
 | CI | workflow `validate-template` run 42880682425: success |
 | Links relativos | verificados pelo validador |
@@ -25,8 +26,9 @@ Data: 2026-11-10. Escopo: template documental e camada de agentes; **sem código
 | Item | Motivo |
 |---|---|
 | Claude Code | CLI ausente no ambiente |
-| `hc run` com template | falha `spawn_failed: sh not found` no Windows |
-| OpenCode com agente via Herdr | depende do item anterior; TUI não autenticado/testado |
+| `hc run` com template nativo | falha `spawn_failed: sh not found` no Windows; wrapper validado |
+| OpenCode TUI nativo no Herdr | wrapper one-shot validado; TUI não exercitado |
+| OpenCode subagentes via CLI | `--agent reviewer` cai no agente padrão (aviso 1.19.0) |
 | Codex subagents/skills | formato não exercitado |
 | Copilot custom agents | validação estrutural apenas |
 | Docker/Compose | daemon parado e sem aplicação |
@@ -34,13 +36,14 @@ Data: 2026-11-10. Escopo: template documental e camada de agentes; **sem código
 
 ## Conclusão
 
-O template está **estruturalmente homologado** e com CI verde. A homologação de
-runtime das ferramentas de IA e do pipeline .NET permanece pendente e não pode
-ser declarada sem execução comprovada.
+O template está **estruturalmente homologado** e com CI verde. O runtime do
+OpenCode via Herdr foi validado pelo wrapper one-shot; o template nativo no
+Windows e o TUI permanecem pendentes. O pipeline .NET não pode ser declarado sem
+execução comprovada.
 
 ## Pendências para a próxima fase
 
-1. Resolver shell do Herdr no Windows (`sh` no PATH ou `shell` no config).
-2. Autenticar OpenCode no ambiente do Herdr.
+1. Resolver shell do Herdr no Windows (`sh` no PATH do core) ou manter o wrapper.
+2. Validar o TUI do OpenCode autenticado dentro do Herdr.
 3. Aprovar Fases 2–3 para iniciar código e pipeline .NET.
 4. Configurar o Space do projeto no Herdr.

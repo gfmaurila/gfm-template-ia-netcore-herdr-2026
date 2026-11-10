@@ -150,7 +150,9 @@ Este repositório é o **template de engenharia assistida por IA** orquestrado p
 - Versão validada: `hc 0.1.19`; templates em `%APPDATA%\herdr-core\templates\<nome>.md`.
 - Templates deste template usam prefixo **`gfm-`** (ex.: `gfm-architect`).
 - Instalação controlada: `.herdr/scripts/install-templates.ps1` (copia, não instala globalmente).
-- Execução: `hc run --bg --name <papel> --cwd <repo> gfm-<papel> "<tarefa>"`.
+- Execução: `hc run --bg --name <papel> --cwd <repo> gfm-<papel> "<tarefa>"` quando
+  `sh` estiver no PATH do core. No Windows sem `sh`, usar
+  `hc run --bg --name <papel> --cwd <repo> powershell -NoProfile -ExecutionPolicy Bypass -File .herdr/scripts/run-agent.ps1 -Role <papel> -Task "<tarefa>"`.
 - Acompanhamento: `hc wait --children`, `hc read`, `hc send`, `hc get`; limpeza: `hc kill`/`hc rm`.
 - Codex dentro do Herdr **deve** rodar com `--no-daemon`.
 - Um Space por projeto; agentes não apontam para repositórios de clientes.

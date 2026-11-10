@@ -22,5 +22,8 @@ apenas especializam formato. Divergência de frontmatter segue a versão **insta
 5. Qualquer divergência encontrada deve ser registrada aqui com data e evidência.
 6. Skills canônicas estão em `ai/skills/`; OpenCode e Claude recebem cópia, Codex e Copilot
    referenciam o diretório canônico. Carregamento em runtime não foi exercitado.
-7. Templates Herdr `gfm-*` são carregados por `hc templates`; a execução via `hc run` falha no
-   Windows por ausência de `sh` (ver `.herdr/README.md`).
+7. Templates Herdr `gfm-*` são carregados por `hc templates`; a execução nativa via `hc run`
+   falha no Windows por ausência de `sh`. O wrapper `.herdr/scripts/run-agent.ps1` foi validado
+   em runtime com OpenCode (ver `.herdr/README.md`).
+8. OpenCode 1.19.0 não executa subagente via `opencode run --agent <subagente>`: cai no agente
+   padrão com aviso. Validado como primário apenas `architect`; subagentes exigem fluxo via `task`.

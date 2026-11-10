@@ -15,7 +15,9 @@ description: Use when delegating work to Herdr agents with hc run --bg, hc wait,
 1. Confirmar objetivo, TASK e gate.
 2. Montar plano de delegação (papel, escopo, saída).
 3. Verificar templates com `hc templates`.
-4. Iniciar com `hc run --bg --name <n> --cwd <repo> gfm-<papel> "<escopo>"`.
+4. Iniciar com `hc run --bg --name <n> --cwd <repo> gfm-<papel> "<escopo>"` quando
+   `sh` estiver no PATH do core; no Windows sem `sh`, usar
+   `powershell -NoProfile -ExecutionPolicy Bypass -File .herdr/scripts/run-agent.ps1 -Role <papel> -Task "<escopo>"`.
 5. Aguardar com `hc wait --children all`.
 6. Ler com `hc read <n> --lines 160`.
 7. Coletar resultados e verificar evidências.

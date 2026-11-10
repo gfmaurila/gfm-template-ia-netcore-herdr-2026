@@ -13,12 +13,13 @@
 | R-HC-009 | Limpar apenas terminais criados pelo próprio agente (`hc kill`, `hc rm`). |
 | R-HC-010 | `hc server stop/restart` só com solicitação explícita do responsável. |
 | R-HC-011 | Falha de push ou de gate interrompe o ciclo para diagnóstico. |
+| R-HC-012 | No Windows sem `sh` no PATH do core, usar `.herdr/scripts/run-agent.ps1`; não criar shim/executável falso de `sh`. |
 
 ## Comandos de referência
 
 ```powershell
 hc templates
-hc run --bg --name review --cwd C:\Work\dev\herdr.dev gfm-reviewer "Revise o diff atual."
+hc run --bg --name review --cwd C:\Work\dev\herdr.dev powershell -NoProfile -ExecutionPolicy Bypass -File .herdr/scripts/run-agent.ps1 -Role reviewer -Task "Revise o diff atual."
 hc wait --children all
 hc read review --lines 120
 hc send review "Priorize bloqueantes."

@@ -13,6 +13,10 @@ hc wait --children all
 hc read security --lines 160
 ```
 
+No Windows sem `sh` no PATH do core, use
+`powershell -NoProfile -ExecutionPolicy Bypass -File .herdr/scripts/run-agent.ps1 -Role <papel> -Task "<escopo>"`
+no lugar de `gfm-<papel> "<escopo>"`.
+
 ## Critério de saída
 
 - Achados classificados (bloqueante / recomendado / opcional) com `arquivo:linha`.

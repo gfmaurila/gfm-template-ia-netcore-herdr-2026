@@ -20,6 +20,10 @@
 9. hc kill <t>; hc rm <t> para cada terminal criado.
 ```
 
+No Windows sem `sh` no PATH do core, use
+`powershell -NoProfile -ExecutionPolicy Bypass -File .herdr/scripts/run-agent.ps1 -Role <papel> -Task "<escopo>"`
+no lugar de `gfm-<papel> "<escopo>"`.
+
 ## Saída
 
 - Relatório do ciclo com objetivo, agentes, arquivos, comandos, validações, erros,

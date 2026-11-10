@@ -57,6 +57,7 @@ REQUIRED = [
     "governance/README.md",
     ".herdr/README.md",
     ".herdr/scripts/install-templates.ps1",
+    ".herdr/scripts/run-agent.ps1",
     ".opencode/opencode.json",
 ]
 

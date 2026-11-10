@@ -11,6 +11,7 @@
 | Claude Code CLI | ausente (não validado em runtime) |
 | Workspace | `C:\Work\dev\herdr.dev` |
 | Templates | `%APPDATA%\herdr-core\templates` |
+| `sh` no PATH | ausente (Git Bash em `C:\Program Files\Git\bin`) |
 
 - `hc`, `herdr-core` e `herdr-app` resolvem no PATH.
 - Nenhuma variável de credencial de IA presente no ambiente.
@@ -49,7 +50,9 @@ Não edite a fonte em `.herdr/templates/` sem revisar `ai/rules/herdr-operations
 1. Abrir/criar um **Space** no Herdr apontando para `C:\Work\dev\herdr.dev`.
 2. Abrir terminal nesse Space.
 3. Instalar templates e confirmar com `hc templates`.
-4. Delegar com escopo exato:
+4. Delegar com escopo exato.
+
+Em Linux/macOS ou Windows com `sh` no PATH do core, use o template nativo:
 
 ```powershell
 hc run --bg --name architect --cwd C:\Work\dev\herdr.dev gfm-architect "Escreva a SPEC de <tema>."
@@ -58,6 +61,26 @@ hc read architect --lines 160
 hc send architect "Priorize riscos de segurança."
 hc kill architect; hc rm architect
 ```
+
+No Windows sem `sh` no PATH do core, use o wrapper validado:
+
+```powershell
+hc run --bg --name architect --cwd C:\Work\dev\herdr.dev powershell -NoProfile -ExecutionPolicy Bypass -File .herdr/scripts/run-agent.ps1 -Role architect -Task "Escreva a SPEC de <tema>."
+hc wait --children all
+hc read architect --lines 160
+hc send architect "Priorize riscos de segurança."
+hc kill architect; hc rm architect
+```
+
+O wrapper lê o template canônico, preserva o corpo e o agente, e chama
+`opencode run --agent <papel>` com corpo + tarefa. `-DryRun` mostra o comando
+sem executar. Não crie shim/executável falso de `sh`.
+
+**Limitação de subagentes:** no OpenCode 1.19.0, `opencode run --agent <subagente>`
+emite `agent "<papel>" is a subagent, not a primary agent` e usa o agente padrão.
+Isso afeta `tester`, `reviewer`, `security-reviewer` e `docs-writer` tanto no
+template nativo quanto no wrapper. O runtime validado é o de agente primário
+(`architect`); subagentes exigem fluxo via `task` ou validação específica.
 
 ## Fluxo com agentes
 
@@ -104,8 +127,10 @@ Se `hc` não for reconhecido em uma nova sessão, ver manual do Herdr, seção 4
 ## Pendências
 
 - Space do projeto ainda não configurado (manual, checklist item 201).
-- Validar OpenCode autenticado dentro do Herdr antes da Fase 4.
+- OpenCode autenticado dentro do Herdr: validado no wrapper em 10/11/2026
+  (agente `architect` respondeu `OK`, exit 0); validar também o TUI nativo.
 - `hc run` com template **não validado em runtime** no Windows: falha com
-  `spawn_failed: cannot start "sh"`. Exige `sh` no PATH (Git Bash) ou `shell`
-  em `%APPDATA%\herdr-core\config.toml`. `hc templates` funciona e lista os 8
-  templates.
+  `spawn_failed: cannot start "sh"`. `shell` no config não resolve templates.
+  A correção nativa exige `sh` no PATH do core (alteração global sujeita a
+  autorização). O wrapper `scripts/run-agent.ps1` é o caminho validado.
+  `hc templates` funciona e lista os 8 templates.

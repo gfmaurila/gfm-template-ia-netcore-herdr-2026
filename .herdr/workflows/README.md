@@ -17,3 +17,5 @@ Fluxos que combinam templates, gates e comandos do Herdr. A política está em
 3. Cada agente reporta com `hc send` ao pai.
 4. Falha de gate interrompe; não avançar por suposição.
 5. Limpar apenas terminais criados pelo próprio agente.
+6. No Windows sem `sh` no PATH do core, substituir `gfm-<papel> "<tarefa>"` por
+   `powershell -NoProfile -ExecutionPolicy Bypass -File .herdr/scripts/run-agent.ps1 -Role <papel> -Task "<tarefa>"`.

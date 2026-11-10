@@ -142,6 +142,8 @@ herdr:
   templates_source: .herdr/templates
   templates_target: "%APPDATA%\\herdr-core\\templates"
   install_script: .herdr/scripts/install-templates.ps1
+  run_script: .herdr/scripts/run-agent.ps1
+  windows_shell_note: "Sem sh no PATH do core, usar run_script; template nativo exige sh."
   workflows: .herdr/workflows
 
 reports:

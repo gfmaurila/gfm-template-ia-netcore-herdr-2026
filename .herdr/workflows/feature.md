@@ -25,6 +25,10 @@ hc run --bg --name reviewer --cwd <repo> gfm-reviewer "Revise o diff da TASK-<AR
 hc wait --children all
 ```
 
+No Windows sem `sh` no PATH do core, use
+`powershell -NoProfile -ExecutionPolicy Bypass -File .herdr/scripts/run-agent.ps1 -Role <papel> -Task "<escopo>"`
+no lugar de `gfm-<papel> "<escopo>"`.
+
 ## Regra
 
 Nenhuma fase começa sem evidência da anterior. Falha de teste bloqueia revisão.

@@ -4,7 +4,8 @@ Template pessoal, reutilizável e independente de empresa/cliente para aplicaç�
 modernas, desenvolvido no workspace `C:\Work\dev\herdr.dev` com OpenCode dentro do Herdr.
 
 > **Status atual: Fase 1 (descoberta) e Fase 2 (documentação) concluídas; camada de
-> engenharia assistida por IA (Ciclos 1–6) concluída e validada estruturalmente.**
+> engenharia assistida por IA (Ciclos 1–7) implementada e validada estruturalmente,
+> com execução one-shot do OpenCode via Herdr validada no Windows.**
 > Nenhum código C# foi gerado. Nenhuma dependência de aplicação foi instalada.
 > A implementação só começa após aprovação explícita.
 

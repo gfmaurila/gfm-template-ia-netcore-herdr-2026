@@ -1,0 +1,191 @@
+RELATORIO — CICLO 7 — HERDR NO WINDOWS E SHELL DOS TEMPLATES
+Data: 2026-11-10
+Workspace: C:\Work\dev\herdr.dev
+Branch: main
+Status: correcao implementada; commit/push pendente de autorizacao
+
+1. OBJETIVO
+Resolver a falha `spawn_failed: cannot start "sh"` ao executar templates `gfm-*`
+no Herdr Core 0.1.19 no Windows, sem alteracoes globais no sistema e sem criar
+executavel falso de `sh`.
+
+2. AMBIENTE VERIFICADO
+- Windows 11 Pro 10.0.26300 (AMD64)
+- Herdr Core hc 0.1.19; Herdr App 0.1.14
+- OpenCode 1.19.0
+- PowerShell 5.1 e PowerShell 7.6.9
+- Git 2.55.0.windows.5
+- `sh.exe` existe em `C:\Program Files\Git\bin\sh.exe`
+- `sh` NAO esta no PATH do core do Herdr
+- `%APPDATA%\herdr-core\config.toml` nao existe no ambiente original
+- 8 templates `gfm-*` instalados em `%APPDATA%\herdr-core\templates`
+
+3. DIAGNOSTICO
+3.1 Template nativo falha
+Comando:
+  hc run --bg --name smoke --cwd C:\Work\dev\herdr.dev gfm-test "Responda apenas OK."
+Resultado:
+  {"error":{"hint":"check the program name and cwd","kind":"spawn_failed",
+  "message":"cannot start \"sh\": sh: not found on PATH"}}
+Log do holder:
+  holder: t1: cannot start "sh": sh: not found on PATH
+
+3.2 Config `shell` nao resolve templates
+Em sessao isolada, `shell = ["cmd", "/d", "/s", "/c"]` em config.toml:
+  - terminal interativo iniciou com o shell configurado;
+  - template continuou falhando com `cannot start "sh"`.
+Teste anterior com `shell = ["C:\\Program Files\\Git\\bin\\sh.exe"]` tambem nao
+alterou o caminho de template. Conclusao: `shell` afeta terminais interativos e
+recovery, mas o caminho de template usa `sh` literal no Windows.
+
+3.3 PATH do core e reconstruido
+Foi iniciado um core isolado com `C:\Program Files\Git\bin` prefixado no PATH do
+processo. O terminal criado pelo holder mostrou o PATH do registro do Windows,
+sem `C:\Program Files\Git\bin`. Uma variavel customizada (`GFM_TEST=abc123`) foi
+herdada, mas o PATH foi substituido. Prefixar o PATH do processo que inicia o
+core nao e suficiente.
+
+3.4 Correcao nativa
+A correcao nativa exigiria `sh` no PATH visivel pelo core (por exemplo, adicionar
+`C:\Program Files\Git\bin` ao PATH do usuario e reiniciar o core). Isso e uma
+alteracao global e NAO foi aplicada; depende de autorizacao explicita.
+
+4. SOLUCAO IMPLEMENTADA (SEM ALTERACAO GLOBAL)
+Criado `.herdr/scripts/run-agent.ps1`:
+- le `.herdr/templates/gfm-<papel>.md`;
+- valida frontmatter e o comando `opencode --agent <papel>`;
+- monta o corpo do template + tarefa;
+- executa `opencode run --agent <papel> "<corpo + tarefa>"`;
+- suporta `-DryRun`;
+- avisa quando o papel e subagente no OpenCode 1.19.0.
+
+Execucao no Windows:
+  hc run --bg --name <papel> --cwd <repo> powershell -NoProfile -ExecutionPolicy Bypass -File .herdr/scripts/run-agent.ps1 -Role <papel> -Task "<tarefa>"
+
+Nao foi criado shim, link ou executavel falso de `sh`. Nenhuma variavel global
+foi alterada. Nenhum `hc server stop/restart` foi executado no core padrao.
+
+5. EVIDENCIAS DE EXECUCAO
+5.1 Wrapper com agente primario architect
+Comando:
+  hc run --bg --name arch-wrapper --cwd C:\Work\dev\herdr.dev powershell -NoProfile -ExecutionPolicy Bypass -File .herdr/scripts/run-agent.ps1 -Role architect -Task "Responda apenas OK em uma linha. Nao altere arquivos."
+Resultado de `hc get arch-wrapper --json`:
+  "agent":"powershell"
+  "exit_code":0
+  "reason":"exited"
+  "state":"finished"
+Tela:
+  > architect · big-pickle
+  OK
+Conclusao: wrapper executou o OpenCode, o agente primario architect respondeu e
+o terminal terminou com exit 0.
+
+5.2 Wrapper com papel subagente reviewer
+Comando:
+  hc run --bg --name review-wrapper --cwd C:\Work\dev\herdr.dev powershell -NoProfile -ExecutionPolicy Bypass -File .herdr/scripts/run-agent.ps1 -Role reviewer -Task "Responda apenas OK em uma linha. Nao altere arquivos."
+Resultado:
+  exit_code 0; tela com `OK`.
+Aviso do OpenCode 1.19.0:
+  agent "reviewer" is a subagent, not a primary agent. Falling back to default agent
+Conclusao: o wrapper inicia e o OpenCode responde, mas o CLI do OpenCode 1.19.0
+nao seleciona subagente via `--agent`; ele cai no agente padrao. Esse
+comportamento tambem existiria no template nativo.
+
+5.3 DryRun dos 8 papeis
+Saida:
+  architect -> opencode run --agent architect <prompt>
+  implementer -> opencode run --agent implementer <prompt>
+  tester -> opencode run --agent tester <prompt>
+  reviewer -> opencode run --agent reviewer <prompt>
+  security-reviewer -> opencode run --agent security-reviewer <prompt>
+  devops -> opencode run --agent devops <prompt>
+  docs-writer -> opencode run --agent docs-writer <prompt>
+  orchestrator -> opencode run --agent orchestrator <prompt>
+
+5.4 Validacao estrutural
+Comando:
+  python scripts/validate-template.py
+Resultado:
+  OK: validacao concluida (0 aviso(s))
+  EXIT=0
+
+5.5 Parser PowerShell
+  ParseFile(.herdr/scripts/run-agent.ps1) => PARSE_OK
+
+6. ARQUIVOS ALTERADOS
+Novo:
+- .herdr/scripts/run-agent.ps1
+Atualizados:
+- AGENTS.md
+- README.md
+- docs/README.md
+- docs/ai/homologation.md
+- docs/ai/multi-tool-matrix.md
+- docs/ai/opencode-herdr.md
+- .herdr/README.md
+- .herdr/workflows/README.md
+- .herdr/workflows/ciclo-completo.md
+- .herdr/workflows/feature.md
+- .herdr/workflows/revisao.md
+- ai/rules/herdr-operations.md
+- ai/registry.yaml
+- ai/prompts/PRM-014@1.0.0.md
+- ai/skills/herdr-orchestration/SKILL.md
+- .opencode/skills/herdr-orchestration/SKILL.md
+- .claude/skills/herdr-orchestration/SKILL.md
+- scripts/validate-template.py
+
+7. O QUE PASSOU
+- Diagnostico da causa: template usa `sh` literal no Windows.
+- Config `shell` isolado nao resolve templates (comprovado).
+- PATH do core reconstruido a partir do registro (comprovado).
+- Wrapper one-shot executou OpenCode via Herdr com agente primario architect.
+- Resposta real `OK`, exit 0, terminal finalizado.
+- DryRun dos 8 papeis sem erro de parsing.
+- Validador estrutural exit 0, 0 avisos.
+- Nenhuma alteracao global, nenhum segredo/PII, nenhum arquivo de cliente.
+
+8. O QUE FALHOU OU FICOU BLOQUEADO
+- `hc run ... gfm-<papel>` nativo continua falhando no Windows sem `sh` no PATH
+  do core.
+- A correcao nativa por PATH global nao foi aplicada: exige autorizacao.
+- O CLI do OpenCode 1.19.0 nao executa subagente via `--agent`; cai no agente
+  padrao. Subagentes exigem fluxo via `task` ou validacao especifica.
+
+9. NAO VALIDADO EM RUNTIME
+- TUI do OpenCode dentro do Herdr.
+- Subagentes OpenCode como subagentes reais.
+- Codex subagents/skills.
+- Claude Code (CLI ausente).
+- Copilot custom agents.
+- Docker/Compose (daemon parado, sem aplicacao).
+- Pipeline .NET (Fases 2-3 pendentes de aprovacao).
+- Space do projeto no Herdr.
+
+10. DECISOES E RISCOS
+- Decisao: nao alterar PATH global nem criar shim de `sh`; usar wrapper local
+  `run-agent.ps1`, que e explicito e suportado por `hc run` em modo argv.
+- Risco: o wrapper depende de `opencode` no PATH e de PowerShell.
+- Risco: subagentes nao sao selecionados pelo CLI do OpenCode; nao declarar
+  runtime de subagente sem evidencia.
+- Risco: o template nativo permanece indisponivel no Windows ate uma correcao
+  de PATH autorizada ou atualizacao do Herdr.
+
+11. RESUMO DE HOMOLOGACAO
+- Execucao pelo wrapper PowerShell: FUNCIONOU. `hc run ... powershell ... run-agent.ps1`
+  iniciou o OpenCode via Herdr, o agente primario architect respondeu `OK` e o
+  terminal terminou com exit 0.
+- Execucao nativa dos templates Herdr: CONTINUA BLOQUEADA no Windows pelo erro
+  `spawn_failed: cannot start "sh": sh: not found on PATH`.
+- Selecao de subagentes no OpenCode 1.19.0: NAO HOMOLOGADA. `--agent <subagente>`
+  cai no agente padrao; o wrapper apenas emite aviso.
+
+12. STATUS E PROXIMOS PASSOS
+Status: correcao implementada e validada no escopo do wrapper. Alteracoes locais
+nao commitadas. Nenhum push executado.
+Proximos passos:
+1. Revisar o diff.
+2. Autorizar commit/push se aprovado.
+3. Opcional: autorizar inclusao de `C:\Program Files\Git\bin` no PATH do usuario
+   e reinicio controlado do core para habilitar templates nativos.
+4. Validar TUI do OpenCode e configurar o Space do projeto no Herdr.
