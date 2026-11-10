@@ -1,0 +1,80 @@
+RELATORIO-2026-11-10-155313-CICLO-3-HERDR.txt
+================================================================================
+PROJETO: GFM.Template (herdr.dev)
+CICLO: 3 - Templates e workflows do Herdr
+DATA: 2026-11-10 15:53:13 (local)
+BRANCH: main
+AGENTES: Orchestrator, DevOps, Docs Writer
+================================================================================
+
+1. OBJETIVO
+--------------------------------------------------------------------------------
+Criar templates de agente com prefixo gfm-, workflows operacionais e script de
+instalacao controlada; validar o carregamento pelo Herdr.
+
+2. ATIVIDADES
+--------------------------------------------------------------------------------
+- .herdr/README.md com instalacao, execucao e regras.
+- 8 templates .herdr/templates/gfm-<papel>.md (frontmatter name/description/
+  command; body com escopo, regras e convencao de reporte ao pai).
+- .herdr/workflows/{README,ciclo-completo,feature,revisao}.md.
+- .herdr/scripts/install-templates.ps1 com -WhatIf e -Force, copiando apenas
+  gfm-*.md para %APPDATA%\herdr-core\templates.
+- docs/ai/opencode-herdr.md atualizado com templates, workflows e comandos.
+
+3. ARQUIVOS
+--------------------------------------------------------------------------------
+- .herdr/README.md
+- .herdr/templates/gfm-{architect,implementer,tester,reviewer,security-reviewer,devops,docs-writer,orchestrator}.md
+- .herdr/workflows/README.md
+- .herdr/workflows/ciclo-completo.md
+- .herdr/workflows/feature.md
+- .herdr/workflows/revisao.md
+- .herdr/scripts/install-templates.ps1
+- docs/ai/opencode-herdr.md (modificado)
+
+4. COMANDOS E VALIDACOES
+--------------------------------------------------------------------------------
+- Parser PowerShell no install-templates.ps1: "OK: script sintaticamente valido".
+- Execucao com -WhatIf: listou criacao do diretorio e copia dos 8 templates,
+  sem escrever.
+- Execucao real: 8 templates copiados para
+  C:\Users\gfmau\AppData\Roaming\herdr-core\templates.
+- `hc templates`: retornou os 8 templates gfm-* com name, description e command.
+  Evidencia real de carregamento pelo Herdr.
+- Frontmatter dos 8 templates: name e command presentes, 2 delimitadores.
+- Links relativos em .herdr/**/*.md e docs/ai/opencode-herdr.md: OK.
+
+5. O QUE NAO PODE SER VALIDADO
+--------------------------------------------------------------------------------
+- `hc run` com template nao foi executado: iniciaria uma sessao interativa do
+  OpenCode (consumo de tokens e espera por turno). O parsing dos templates foi
+  validado via `hc templates`, nao o handoff completo.
+- Autenticacao do OpenCode dentro do Herdr permanece pendente.
+- Codex/Claude dentro do Herdr nao testados neste ciclo.
+
+6. DECISOES
+--------------------------------------------------------------------------------
+- Templates primarios usam `opencode --agent <papel>`; troca para
+  `codex --no-daemon` e documentada, nao duplicada em 16 arquivos.
+- Instalacao e copia controlada com -WhatIf/-Force, sem instalacao global.
+- Body dos templates exige reporte via `hc send $HC_TERMINAL_ID` e proibe
+  subagentes (exceto Orchestrator).
+
+7. RISCOS
+--------------------------------------------------------------------------------
+- Template aponta para agentes OpenCode; se o schema de agentes mudar, o
+  `--agent` pode falhar. Revalidar apos upgrade.
+- Copia instalada pode divergir da fonte; reinstalar com -Force apos mudancas.
+- Custo de IA ao executar agentes: execucao permanece sob controle humano.
+
+8. STATUS
+--------------------------------------------------------------------------------
+Concluido o conteudo do Ciclo 3. Commit e push pendentes no momento da geracao.
+
+9. PROXIMOS PASSOS
+--------------------------------------------------------------------------------
+- Commit: feat(herdr): templates e workflows.
+- Push para origin/main e registro do SHA.
+- Ciclo 4: skills, tasks, templates de documento e governance.
+================================================================================
