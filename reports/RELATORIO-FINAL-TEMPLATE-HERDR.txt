@@ -1,0 +1,108 @@
+RELATORIO-FINAL-TEMPLATE-HERDR.txt
+================================================================================
+PROJETO: GFM.Template (herdr.dev)
+ENTREGA: Template de engenharia assistida por IA orquestrado pelo Herdr
+DATA: 2026-11-10 16:02:43 (local)
+BRANCH: main
+REMOTO: https://github.com/gfmaurila/gfm-template-ia-netcore-herdr-2026.git
+================================================================================
+
+1. OBJETIVO
+--------------------------------------------------------------------------------
+Entregar um template pessoal, independente de cliente, com fonte canonica de
+agentes, regras, prompts, skills, workflows, tasks, templates e governanca,
+adaptado a OpenCode, Claude Code, Codex e Copilot, e orquestravel pelo Herdr.
+
+2. CICLOS EXECUTADOS
+--------------------------------------------------------------------------------
+- Ciclo 0: ambiente, Git, backups e estrutura de diretorios.
+- Ciclo 1: fundacao canonica (AGENTS.md, ai/, prompts, regras, agentes).
+  Commit 1984008 - feat(ai): fundacao canonica.
+- Ciclo 2: adaptadores multi-ferramenta (.opencode, .claude, .codex, .github).
+  Commit 239aa14 - feat(adapters): adaptadores multi-ferramenta.
+- Ciclo 3: templates e workflows do Herdr; instalacao controlada.
+  Commit 379d84c - feat(herdr): templates e workflows.
+- Ciclo 4: 11 skills, 6 workflows, 5 modelos, TASKs e governanca.
+  Commit 4181bb5 - feat(ai): skills, templates, tasks e governanca.
+- Ciclo 5: validacao estrutural e GitHub Actions.
+  Commit 2720706 - ci(template): validacao estrutural no GitHub Actions.
+- Ciclo 6: homologacao, limites de runtime e este relatorio.
+
+3. ENTREGAVEIS
+--------------------------------------------------------------------------------
+- AGENTS.md, CLAUDE.md, README.md, prompts.md.
+- ai/: 8 agentes, 6 regras, 14 prompts versionados, 11 skills, 6 workflows,
+  registry.yaml.
+- .opencode/: 8 agentes, 6 comandos, 11 skills, opencode.json.
+- .claude/: 8 agentes, 6 comandos, 11 skills.
+- .codex/: 8 prompts, README e regras.
+- .github/: instrucoes Copilot, 8 agentes, 3 instrucoes por caminho,
+  6 prompts, workflow de validacao.
+- .herdr/: 8 templates gfm-*, 3 workflows, script de instalacao.
+- templates/: SPEC, ADR, PLAN, TEST-PLAN e SECURITY-REVIEW; TASK em tasks/.
+- tasks/: formato unico, backlog e done.
+- governance/: agentes, arquitetura, codigo, qualidade e seguranca.
+- scripts/validate-template.py.
+- reports/: relatorios dos Ciclos 1-6.
+
+4. VALIDACOES REAIS
+--------------------------------------------------------------------------------
+- Validacao estrutural local: "OK: validacao concluida (0 aviso(s))", exit=0,
+  com PyYAML isolado em diretorio temporario e REQUIRE_YAML=1.
+- 8/8 agentes canonicos; 14/14 prompts; 11/11 skills; adaptadores com 11/11.
+- 8 templates Herdr carregados por `hc templates` (evidencia JSON).
+- Links relativos, JSON e YAML validos.
+- GitHub Actions run 42880682425: conclusao "success" no commit 2720706.
+  https://github.com/gfmaurila/gfm-template-ia-netcore-herdr-2026/actions/runs/42880682425
+- `leia.txt` e manual do Herdr preservados (sem alteracao).
+- Nenhum segredo, token ou PII introduzido.
+
+5. FALHAS ENCONTRADAS E TRATADAS
+--------------------------------------------------------------------------------
+- Validador inicial acusou 9 erros (description ausente nos agentes e checagem
+  incorreta de prompts Copilot). Script corrigido; reexecucao exit=0.
+- Skills README sofreu corrupcao de encoding durante edicao via shell; arquivo
+  restaurado do Git e reeditado com ferramenta de edicao.
+- `hc run` com template falhou no Windows: `spawn_failed: cannot start "sh"`.
+  Causa: Herdr monta a mensagem do template via sh, ausente no PATH.
+  Nao corrigido por exigir alteracao de configuracao global do Herdr.
+
+6. NAO VALIDADO EM RUNTIME
+--------------------------------------------------------------------------------
+- Claude Code CLI (ausente).
+- `hc run` com template e agentes OpenCode dentro do Herdr (falha de sh).
+- Codex subagents/skills e Copilot custom agents.
+- Carregamento de skills pelo OpenCode em sessao real.
+- Docker/Compose (daemon parado; sem aplicacao).
+- Pipeline .NET (bloqueado pela Fase 3).
+
+7. DECISOES REGISTRADAS
+--------------------------------------------------------------------------------
+- TASK tem fonte unica em tasks/TASK-TEMPLATE.md.
+- Skills canonicas em ai/skills; copias para OpenCode/Claude; Codex/Copilot
+  referenciam o canonico.
+- Governanca publica a politica de ai/rules, sem criar regra nova.
+- CI atual valida o template, nao simula build de aplicacao.
+- PyYAML obrigatorio no CI e opcional localmente.
+
+8. RISCOS RESIDUAIS
+--------------------------------------------------------------------------------
+- Herdr no Windows requer sh no PATH ou `shell` configurado para executar
+  templates; sem isso a orquestracao nao roda.
+- Duplicacao de skills/adaptadores pode divergir se a copia nao for refeita.
+- Validacao estrutural nao garante comportamento de runtime.
+- Aprovacao das Fases 2-3 continua pendente; nenhum codigo C# foi gerado.
+
+9. STATUS FINAL
+--------------------------------------------------------------------------------
+Template documental e camada de agentes entregues, versionados e com CI verde.
+Homologacao de runtime parcial: itens da secao 6 permanecem pendentes e nao
+foram declarados como concluidos.
+
+10. PROXIMOS PASSOS
+--------------------------------------------------------------------------------
+1. Resolver shell do Herdr no Windows (sh no PATH ou config.toml).
+2. Autenticar OpenCode no Herdr e executar um ciclo smoke real.
+3. Aprovar Fases 2-3 para iniciar implementacao .NET.
+4. Configurar o Space do projeto no Herdr.
+================================================================================

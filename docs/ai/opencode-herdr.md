@@ -105,4 +105,7 @@ Se `hc` não for reconhecido em uma nova sessão, ver manual do Herdr, seção 4
 
 - Space do projeto ainda não configurado (manual, checklist item 201).
 - Validar OpenCode autenticado dentro do Herdr antes da Fase 4.
-- Validar `hc run` com template em runtime antes de declarar homologado.
+- `hc run` com template **não validado em runtime** no Windows: falha com
+  `spawn_failed: cannot start "sh"`. Exige `sh` no PATH (Git Bash) ou `shell`
+  em `%APPDATA%\herdr-core\config.toml`. `hc templates` funciona e lista os 8
+  templates.

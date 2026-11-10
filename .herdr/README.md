@@ -27,6 +27,19 @@ hc read architect --lines 120
 hc kill architect; hc rm architect
 ```
 
+## Limitação verificada (Windows, 10/11/2026)
+
+- `hc templates` lista os 8 templates `gfm-*` após a instalação.
+- `hc run ... gfm-<papel> "<tarefa>"` falha com
+  `spawn_failed: cannot start "sh": sh: not found on PATH`.
+  O Herdr monta a mensagem do template via `sh`; no Windows é necessário ter
+  `sh` no PATH (ex.: Git Bash) ou definir `shell` em
+  `%APPDATA%\herdr-core\config.toml`.
+- Alternativa direta (`hc run ... opencode`) inicia o TUI, mas o argumento
+  final é tratado pelo OpenCode 1.19.0 como caminho de projeto; para uso
+  one-shot seria `opencode run`. A execução de agentes pelo Herdr permanece
+  **não validada em runtime** até resolver o shell.
+
 ## Regras
 
 - Um Space por projeto; nunca apontar para repositórios de clientes.

@@ -4,7 +4,7 @@ Template pessoal, reutilizável e independente de empresa/cliente para aplicaç�
 modernas, desenvolvido no workspace `C:\Work\dev\herdr.dev` com OpenCode dentro do Herdr.
 
 > **Status atual: Fase 1 (descoberta) e Fase 2 (documentação) concluídas; camada de
-> engenharia assistida por IA (Ciclos 1–6) em construção.**
+> engenharia assistida por IA (Ciclos 1–6) concluída e validada estruturalmente.**
 > Nenhum código C# foi gerado. Nenhuma dependência de aplicação foi instalada.
 > A implementação só começa após aprovação explícita.
 
@@ -63,6 +63,7 @@ herdr.dev/
 ├─ templates/                # modelos de spec, ADR, plano, task, teste, security review
 ├─ governance/               # política publicada para humanos
 ├─ reports/                  # relatórios e evidências por ciclo
+├─ scripts/                  # validação estrutural do template
 ├─ docs/                     # ver docs/README.md
 ├─ src/                      # Fase 4+ (implementação)
 ├─ tests/                    # Fase 4+ (implementação)
@@ -87,6 +88,7 @@ Comece por [`docs/README.md`](docs/README.md). Destaques:
 - [`docs/plans/implementation-plan.md`](docs/plans/implementation-plan.md) — plano e gates.
 - [`docs/plans/open-questions.md`](docs/plans/open-questions.md) — decisões pendentes.
 - [`docs/security/security-baseline.md`](docs/security/security-baseline.md) — segurança.
+- [`docs/ai/homologation.md`](docs/ai/homologation.md) — homologação e limites do runtime.
 
 ## Ambiente verificado (10/11/2026)
 

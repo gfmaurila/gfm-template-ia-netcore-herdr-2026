@@ -36,7 +36,7 @@
 | 2 — Documentação e planejamento | Concluída |
 | 3 — Arquitetura | Proposta; aguarda aprovação |
 | 4+ — Implementação | **Bloqueada** até aprovação explícita |
-| Camada de IA (Ciclos 1–6) | Em construção; ver `reports/` |
+| Camada de IA (Ciclos 1–6) | Concluída; homologação em [`ai/homologation.md`](ai/homologation.md) |
 
 ## Princípios
 

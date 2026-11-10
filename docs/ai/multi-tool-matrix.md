@@ -20,3 +20,7 @@ apenas especializam formato. Divergência de frontmatter segue a versão **insta
 3. Codex dentro do Herdr **deve** rodar com `--no-daemon`.
 4. Copilot: custom agents/instructions são validação estrutural, não runtime.
 5. Qualquer divergência encontrada deve ser registrada aqui com data e evidência.
+6. Skills canônicas estão em `ai/skills/`; OpenCode e Claude recebem cópia, Codex e Copilot
+   referenciam o diretório canônico. Carregamento em runtime não foi exercitado.
+7. Templates Herdr `gfm-*` são carregados por `hc templates`; a execução via `hc run` falha no
+   Windows por ausência de `sh` (ver `.herdr/README.md`).
