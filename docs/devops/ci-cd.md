@@ -1,6 +1,25 @@
 # CI/CD — GitHub Actions
 
-> Pipeline **planejado**; não criado/executado nesta fase.
+> Nesta fase (template documental) existe apenas o workflow de validação
+> `validate-template.yml`. O pipeline de aplicação descrito abaixo é **planejado**;
+> só será criado após a aprovação da Fase 3.
+
+## Workflow atual — `validate-template.yml`
+
+Gatilhos: `push` em `main`, `pull_request` e `workflow_dispatch`.
+
+| Etapa | Verificação |
+|---|---|
+| Estrutura | arquivos obrigatórios, 8 agentes, 14 prompts, 11 skills |
+| Adaptadores | paridade de papéis em OpenCode, Claude, Codex e Copilot |
+| Herdr | 8 templates `gfm-*` com `name` e `command` |
+| Documentos | links relativos, JSON válido, frontmatter |
+| YAML | `ai/registry.yaml` com PyYAML |
+
+- Runner: `ubuntu-latest`; Python 3.12; permissões `contents: read`.
+- Script: [`scripts/validate-template.py`](../../scripts/validate-template.py).
+- Execução local: `python scripts/validate-template.py` (YAML exige PyYAML;
+  use `REQUIRE_YAML=1` para tornar a checagem obrigatória).
 
 ## Estratégia
 

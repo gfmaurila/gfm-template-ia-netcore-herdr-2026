@@ -1,0 +1,76 @@
+RELATORIO-2026-11-10-155850-CICLO-5-CI.txt
+================================================================================
+PROJETO: GFM.Template (herdr.dev)
+CICLO: 5 - CI de validacao e evidencias
+DATA: 2026-11-10 15:58:50 (local)
+BRANCH: main
+AGENTES: DevOps, Reviewer
+================================================================================
+
+1. OBJETIVO
+--------------------------------------------------------------------------------
+Criar validacao automatizada do template e executa-la no GitHub Actions,
+substituindo a verificacao manual dos ciclos anteriores.
+
+2. ATIVIDADES
+--------------------------------------------------------------------------------
+- scripts/validate-template.py (stdlib): arquivos obrigatorios, 8 agentes,
+  14 prompts, 11 skills, paridade de adaptadores, 8 templates Herdr, JSON,
+  YAML (PyYAML) e links relativos.
+- .github/workflows/validate-template.yml: push main, pull_request e
+  workflow_dispatch; Python 3.12; REQUIRE_YAML=1; contents: read.
+- docs/devops/ci-cd.md: documenta o workflow atual e mantem o pipeline de
+  aplicacao como planejado.
+- .github/README.md: referencia o workflow.
+
+3. ARQUIVOS
+--------------------------------------------------------------------------------
+- scripts/validate-template.py (novo)
+- .github/workflows/validate-template.yml (novo)
+- docs/devops/ci-cd.md (modificado)
+- .github/README.md (modificado)
+
+4. COMANDOS E VALIDACOES
+--------------------------------------------------------------------------------
+- python scripts/validate-template.py (sem PyYAML):
+  "OK: validacao concluida (1 aviso(s))", exit=0.
+- PyYAML instalado apenas em diretorio temporario isolado
+  (C:\Users\gfmau\AppData\Local\Temp\opencode\pylibs), sem instalacao global.
+- Com PYTHONPATH temporario e REQUIRE_YAML=1:
+  "OK: validacao concluida (0 aviso(s))", exit=0. YAML valido.
+- Primeira execucao detectou 9 erros reais (description ausente nos agentes
+  canonicos e checagem incorreta de prompts Copilot); script corrigido e
+  reexecutado com sucesso. Registro de falha e correcao, nao de sucesso falso.
+
+5. O QUE NAO PODE SER VALIDADO
+--------------------------------------------------------------------------------
+- Execucao do workflow no GitHub Actions nao observada no momento da geracao;
+  `gh` CLI nao autenticado. A verificacao do run depende de consulta publica
+  ou autenticacao posterior.
+- Pipeline .NET (build/test/format/image) nao existe: depende da Fase 3.
+- Testcontainers nao executado (sem codigo e com daemon Docker parado).
+
+6. DECISOES
+--------------------------------------------------------------------------------
+- CI atual valida o template documental; nao simula build de aplicacao.
+- PyYAML e obrigatorio no CI e opcional localmente para nao exigir instalacao
+  global; REQUIRE_YAML=1 torna a checagem estrita.
+- Acoes usam tags principais (checkout@v4, setup-python@v5) para manutencao
+  simples; pinagem por SHA fica para quando o pipeline de aplicacao for criado.
+
+7. RISCOS
+--------------------------------------------------------------------------------
+- Tags de actions podem mudar; revisar antes de producao.
+- Validacao estrutural nao garante comportamento de runtime das ferramentas.
+- Link checker ignora URLs externas; links externos podem apodrecer.
+
+8. STATUS
+--------------------------------------------------------------------------------
+Concluido o conteudo do Ciclo 5. Commit e push pendentes no momento da geracao.
+
+9. PROXIMOS PASSOS
+--------------------------------------------------------------------------------
+- Commit: ci(template): validacao estrutural no GitHub Actions.
+- Push para origin/main e verificacao do run do workflow.
+- Ciclo 6: homologacao, checklist final e relatorio final.
+================================================================================

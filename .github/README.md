@@ -8,10 +8,11 @@ A fonte canônica é [`AGENTS.md`](../AGENTS.md) + [`ai/`](../ai/README.md).
 | [`agents/`](agents/) | Custom agents (`*.agent.md`). |
 | [`instructions/`](instructions/) | Instruções por caminho (`*.instructions.md`). |
 | [`prompts/`](prompts/) | Prompt files (`*.prompt.md`). |
-| `workflows/` | CI (Ciclo 5). |
+| [`workflows/validate-template.yml`](workflows/validate-template.yml) | Validação estrutural do template no CI. |
 
 ## Limitações verificadas
 
 - Custom agents/instructions/prompts do Copilot são validação estrutural, não runtime.
-- O CI será criado no Ciclo 5; não há workflow neste ciclo.
+- O workflow `validate-template.yml` valida o template; o CI de aplicação .NET
+  continua planejado para após a Fase 3.
 - Divergências: [`docs/ai/multi-tool-matrix.md`](../docs/ai/multi-tool-matrix.md).
