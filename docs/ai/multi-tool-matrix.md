@@ -10,7 +10,7 @@ apenas especializam formato. Divergência de frontmatter segue a versão **insta
 | Comandos | `.opencode/commands/*.md` | `.claude/commands/*.md` | prompts | `.github/prompts/*.prompt.md` |
 | Skills | `.opencode/skills/<id>/SKILL.md` | `.claude/skills/<id>/SKILL.md` | a validar | `.github/instructions/*.instructions.md` |
 | Config | `.opencode/opencode.json` | `settings.json` | `config.toml` | repositório |
-| Versão validada | 1.19.0 | ausente | 0.163.0 | não validado |
+| Versão validada | 1.19.0 | ausente | 0.163.0 | 1.0.108 (smoke CLI); custom agents estruturais |
 
 ## Observações
 
@@ -26,4 +26,9 @@ apenas especializam formato. Divergência de frontmatter segue a versão **insta
    falha no Windows por ausência de `sh`. O wrapper `.herdr/scripts/run-agent.ps1` foi validado
    em runtime com OpenCode (ver `.herdr/README.md`).
 8. OpenCode 1.19.0 não executa subagente via `opencode run --agent <subagente>`: cai no agente
-   padrão com aviso. Validado como primário apenas `architect`; subagentes exigem fluxo via `task`.
+   padrão com aviso. O wrapper `.herdr/scripts/run-agent.ps1` contorna isso delegando
+   `tester`, `reviewer`, `security-reviewer` e `docs-writer` pelo `orchestrator` com a ferramenta
+   `task`; os 8 papéis foram homologados em runtime em 10/11/2026.
+9. Smoke tests de CLI em 10/11/2026: OpenCode 8 papéis (tokens de papel), Codex `CODEX_OK` e
+   Copilot `COPILOT_OK`, todos com exit 0. Claude Code não está instalado. O Codex emitiu erro de
+   autenticação do MCP Postman durante o teste, sem bloquear a resposta.

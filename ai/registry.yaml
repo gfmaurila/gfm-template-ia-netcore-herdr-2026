@@ -114,6 +114,7 @@ adapters:
     commands: .opencode/commands
     skills: .opencode/skills
     config: .opencode/opencode.json
+    note: "8 papéis homologados via run-agent.ps1 em 10/11/2026; subagentes via orchestrator + task."
   claude:
     version_tested: null
     instructions: CLAUDE.md
@@ -126,14 +127,14 @@ adapters:
     instructions: AGENTS.md
     prompts: .codex/prompts
     rules: .codex/rules
-    note: "Executar com --no-daemon dentro do Herdr."
+    note: "Executar com --no-daemon dentro do Herdr. Smoke test CODEX_OK em 10/11/2026; erro de auth do MCP Postman não bloqueante."
   copilot:
-    version_tested: null
+    version_tested: "1.0.108"
     instructions: .github/copilot-instructions.md
     agents: .github/agents
     instructions_dir: .github/instructions
     prompts: .github/prompts
-    note: "Custom agents/instructions são validação estrutural, não runtime."
+    note: "Custom agents/instructions são validação estrutural. CLI smoke test COPILOT_OK em 10/11/2026."
 
 herdr:
   core_version: "0.1.19"
@@ -143,10 +144,11 @@ herdr:
   templates_target: "%APPDATA%\\herdr-core\\templates"
   install_script: .herdr/scripts/install-templates.ps1
   run_script: .herdr/scripts/run-agent.ps1
-  windows_shell_note: "Sem sh no PATH do core, usar run_script; template nativo exige sh."
+  windows_shell_note: "Sem sh no PATH do core, usar run_script; subagentes sao delegados via orchestrator + task."
   workflows: .herdr/workflows
 
 reports:
   dir: reports
   pattern: "RELATORIO-{yyyy-MM-dd-HHmmss}-{ciclo}.txt"
   final: reports/RELATORIO-FINAL-TEMPLATE-HERDR.txt
+  homologation: reports/RELATORIO-FINAL-HOMOLOGACAO-HERDR.txt

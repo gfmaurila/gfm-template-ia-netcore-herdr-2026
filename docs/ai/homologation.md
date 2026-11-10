@@ -1,4 +1,4 @@
-# Homologação do template (Ciclos 6–7)
+# Homologação do template (Ciclos 6–8)
 
 Data: 2026-11-10. Escopo: template documental e camada de agentes; **sem código C#**.
 
@@ -13,7 +13,12 @@ Data: 2026-11-10. Escopo: template documental e camada de agentes; **sem código
 | 5 modelos + TASK | `templates/` e `tasks/TASK-TEMPLATE.md` |
 | 6 documentos de governança | `governance/` |
 | 8 templates Herdr | `hc templates` lista `gfm-*` |
-| Execução de agente primário via Herdr | `hc run ... run-agent.ps1 -Role architect` respondeu `OK`, exit 0 |
+| Execução de agente primário via Herdr | `run-agent.ps1` com `architect`, `implementer`, `devops`, `orchestrator`: exit 0 e token do papel |
+| Execução de subagente via Herdr | `run-agent.ps1` delega `tester`, `reviewer`, `security-reviewer`, `docs-writer` via `orchestrator` + `task`; log `agent=<papel> mode=subagent` |
+| Homologação dos 8 papéis | tokens `ARCHITECT_OK`, `IMPLEMENTER_OK`, `TESTER_OK`, `REVIEWER_OK`, `SECURITY_REVIEWER_OK`, `DEVOPS_OK`, `DOCS_WRITER_OK`, `ORCHESTRATOR_OK`; exit 0 |
+| Codex CLI | `codex exec ...` respondeu `CODEX_OK`, exit 0; erro de auth do MCP Postman não bloqueante |
+| Copilot CLI | `copilot -p ...` respondeu `COPILOT_OK`, exit 0 |
+| Herdr | `hc 0.1.19`, `herdr-app 0.1.14`; `hc templates` lista 8 templates `gfm-*` |
 | Validação estrutural | `python scripts/validate-template.py` exit 0 |
 | CI | workflow `validate-template` run 42880682425: success |
 | Links relativos | verificados pelo validador |
@@ -26,9 +31,9 @@ Data: 2026-11-10. Escopo: template documental e camada de agentes; **sem código
 | Item | Motivo |
 |---|---|
 | Claude Code | CLI ausente no ambiente |
-| `hc run` com template nativo | falha `spawn_failed: sh not found` no Windows; wrapper validado |
-| OpenCode TUI nativo no Herdr | wrapper one-shot validado; TUI não exercitado |
-| OpenCode subagentes via CLI | `--agent reviewer` cai no agente padrão (aviso 1.19.0) |
+| `hc run` com template nativo | falha `spawn_failed: sh not found` no Windows; wrapper é o mecanismo oficial |
+| OpenCode TUI no Herdr | execução one-shot via wrapper; TUI não exercitado |
+| OpenCode subagente via CLI direta | `--agent reviewer` cai no agente padrão (aviso 1.19.0); contornado pelo wrapper via `task` |
 | Codex subagents/skills | formato não exercitado |
 | Copilot custom agents | validação estrutural apenas |
 | Docker/Compose | daemon parado e sem aplicação |
@@ -37,13 +42,15 @@ Data: 2026-11-10. Escopo: template documental e camada de agentes; **sem código
 ## Conclusão
 
 O template está **estruturalmente homologado** e com CI verde. O runtime do
-OpenCode via Herdr foi validado pelo wrapper one-shot; o template nativo no
-Windows e o TUI permanecem pendentes. O pipeline .NET não pode ser declarado sem
-execução comprovada.
+OpenCode via Herdr foi homologado para os 8 papéis pelo wrapper one-shot,
+incluindo subagentes delegados por `task`; o template nativo no Windows e o TUI
+permanecem pendentes. O pipeline .NET não pode ser declarado sem execução
+comprovada.
 
 ## Pendências para a próxima fase
 
-1. Resolver shell do Herdr no Windows (`sh` no PATH do core) ou manter o wrapper.
+1. Manter o wrapper como mecanismo oficial no Windows; a correção nativa exige
+   `sh` no PATH do core (alteração global sujeita a autorização).
 2. Validar o TUI do OpenCode autenticado dentro do Herdr.
 3. Aprovar Fases 2–3 para iniciar código e pipeline .NET.
 4. Configurar o Space do projeto no Herdr.

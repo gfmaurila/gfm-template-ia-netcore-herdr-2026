@@ -72,15 +72,19 @@ hc send architect "Priorize riscos de segurança."
 hc kill architect; hc rm architect
 ```
 
-O wrapper lê o template canônico, preserva o corpo e o agente, e chama
-`opencode run --agent <papel>` com corpo + tarefa. `-DryRun` mostra o comando
-sem executar. Não crie shim/executável falso de `sh`.
+O wrapper lê o template canônico, preserva o corpo e o agente, e executa o papel.
+Agentes primários (`architect`, `implementer`, `devops`, `orchestrator`) usam
+`opencode run --agent <papel>` com corpo + tarefa. Subagentes (`tester`,
+`reviewer`, `security-reviewer`, `docs-writer`) são delegados pelo wrapper via
+`orchestrator` e ferramenta `task`, com o corpo do template e a tarefa
+repassados ao subagente. `-DryRun` mostra o comando sem executar. Não crie
+shim/executável falso de `sh`.
 
 **Limitação de subagentes:** no OpenCode 1.19.0, `opencode run --agent <subagente>`
 emite `agent "<papel>" is a subagent, not a primary agent` e usa o agente padrão.
-Isso afeta `tester`, `reviewer`, `security-reviewer` e `docs-writer` tanto no
-template nativo quanto no wrapper. O runtime validado é o de agente primário
-(`architect`); subagentes exigem fluxo via `task` ou validação específica.
+O wrapper contorna a limitação delegando esses papéis pelo `orchestrator`; o log
+do OpenCode registra `agent=<papel> mode=subagent` para cada um. Os 8 papéis
+foram homologados em 10/11/2026 (ver `reports/RELATORIO-FINAL-HOMOLOGACAO-HERDR.txt`).
 
 ## Fluxo com agentes
 
@@ -127,10 +131,11 @@ Se `hc` não for reconhecido em uma nova sessão, ver manual do Herdr, seção 4
 ## Pendências
 
 - Space do projeto ainda não configurado (manual, checklist item 201).
-- OpenCode autenticado dentro do Herdr: validado no wrapper em 10/11/2026
-  (agente `architect` respondeu `OK`, exit 0); validar também o TUI nativo.
-- `hc run` com template **não validado em runtime** no Windows: falha com
+- OpenCode autenticado dentro do Herdr: os 8 papéis foram homologados pelo
+  wrapper em 10/11/2026 (tokens de papel, exit 0 e log
+  `agent=<papel> mode=primary|subagent`). O TUI nativo ainda não foi exercitado.
+- `hc run` com template nativo continua **bloqueado** no Windows: falha com
   `spawn_failed: cannot start "sh"`. `shell` no config não resolve templates.
   A correção nativa exige `sh` no PATH do core (alteração global sujeita a
-  autorização). O wrapper `scripts/run-agent.ps1` é o caminho validado.
+  autorização). O wrapper `scripts/run-agent.ps1` é o caminho oficial validado.
   `hc templates` funciona e lista os 8 templates.

@@ -40,8 +40,12 @@ hc kill architect; hc rm architect
 ```
 
 O wrapper lê `.herdr/templates/gfm-<papel>.md`, valida o comando
-`opencode --agent <papel>` e executa `opencode run` com o corpo do template e a
-tarefa. Use `-DryRun` para mostrar o comando sem executar.
+`opencode --agent <papel>` e executa o papel. Para agentes primários
+(`architect`, `implementer`, `devops`, `orchestrator`), chama
+`opencode run --agent <papel>` com o corpo do template e a tarefa. Para
+subagentes (`tester`, `reviewer`, `security-reviewer`, `docs-writer`), delega
+via `orchestrator` e ferramenta `task`, repassando o corpo do template e a
+tarefa ao subagente. Use `-DryRun` para mostrar o comando sem executar.
 
 ## Limitação verificada (Windows, 10/11/2026)
 
@@ -58,10 +62,11 @@ tarefa. Use `-DryRun` para mostrar o comando sem executar.
   `C:\Program Files\Git\bin` ao PATH do usuário e reiniciar o core). Isso é uma
   alteração global e depende de autorização explícita.
 - Workaround validado em 10/11/2026: `scripts/run-agent.ps1` via
-  `hc run ... powershell ...`, sem `sh`, com resposta real do agente OpenCode.
+  `hc run ... powershell ...`, sem `sh`, com resposta real dos 8 papéis.
 - OpenCode 1.19.0: `--agent <subagente>` cai no agente padrão
-  (`agent ... is a subagent, not a primary agent`). O runtime validado é o de
-  agente primário (`architect`); subagentes exigem fluxo via `task`.
+  (`agent ... is a subagent, not a primary agent`). O wrapper contorna isso
+  delegando subagentes pelo `orchestrator` com a ferramenta `task`; o log do
+  OpenCode registra `agent=<papel> mode=subagent` para cada um.
 
 ## Regras
 

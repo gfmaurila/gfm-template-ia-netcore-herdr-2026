@@ -72,16 +72,30 @@ if (-not $opencode) {
 }
 
 $primaryRoles = @('architect', 'implementer', 'devops', 'orchestrator')
-if ($Role -notin $primaryRoles) {
-    Write-Warning "OpenCode 1.19.0 executa '$Role' no agente padrao; subagente nao e selecionavel via CLI."
-}
-
 $prompt = $body + "`n`nTarefa:`n`n" + $Task.Trim()
 
+if ($Role -in $primaryRoles) {
+    if ($DryRun) {
+        Write-Output "opencode run --agent $agent <prompt>"
+        return
+    }
+
+    & $opencode.Source run --agent $agent $prompt
+    exit $LASTEXITCODE
+}
+
+$delegationPrompt = @"
+Use the task tool exactly once with subagent_type=$Role.
+Pass the following prompt verbatim to the subagent, then return only the subagent's final response.
+Do not read files, run commands, or perform any other step.
+
+$prompt
+"@
+
 if ($DryRun) {
-    Write-Output "opencode run --agent $agent <prompt>"
+    Write-Output "opencode run --agent orchestrator <delegation prompt for $Role>"
     return
 }
 
-& $opencode.Source run --agent $agent $prompt
+& $opencode.Source run --agent orchestrator $delegationPrompt
 exit $LASTEXITCODE

@@ -33,7 +33,7 @@ Leia `README.md`, `docs/README.md` e os ADRs antes de propor mudanças.
 - Git 2.55.0.windows.5; repositório local na branch `main`, remoto
   `https://github.com/gfmaurila/gfm-template-ia-netcore-herdr-2026.git`.
 - Docker CLI 29.8.2, porém **daemon parado** (`com.docker.service` = Stopped).
-- Node 24.20.0 / npm 11.19.0 / OpenCode 1.19.0 / Codex CLI 0.163.0.
+- Node 24.20.0 / npm 11.19.0 / OpenCode 1.19.0 / Codex CLI 0.163.0 / Copilot CLI 1.0.108.
 - Claude Code CLI **não instalado** (adaptador documentado, não validado em runtime).
 - `gh` CLI **não autenticado**; push depende do credential helper `manager`.
 - Nenhuma variável de credencial de IA no ambiente.
@@ -153,6 +153,9 @@ Este repositório é o **template de engenharia assistida por IA** orquestrado p
 - Execução: `hc run --bg --name <papel> --cwd <repo> gfm-<papel> "<tarefa>"` quando
   `sh` estiver no PATH do core. No Windows sem `sh`, usar
   `hc run --bg --name <papel> --cwd <repo> powershell -NoProfile -ExecutionPolicy Bypass -File .herdr/scripts/run-agent.ps1 -Role <papel> -Task "<tarefa>"`.
+- No wrapper, subagentes (`tester`, `reviewer`, `security-reviewer`, `docs-writer`) são
+  delegados pelo `orchestrator` via ferramenta `task`; a CLI do OpenCode 1.19.0 não os
+  seleciona diretamente com `--agent`.
 - Acompanhamento: `hc wait --children`, `hc read`, `hc send`, `hc get`; limpeza: `hc kill`/`hc rm`.
 - Codex dentro do Herdr **deve** rodar com `--no-daemon`.
 - Um Space por projeto; agentes não apontam para repositórios de clientes.

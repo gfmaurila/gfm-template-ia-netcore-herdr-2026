@@ -13,7 +13,7 @@
 | R-HC-009 | Limpar apenas terminais criados pelo próprio agente (`hc kill`, `hc rm`). |
 | R-HC-010 | `hc server stop/restart` só com solicitação explícita do responsável. |
 | R-HC-011 | Falha de push ou de gate interrompe o ciclo para diagnóstico. |
-| R-HC-012 | No Windows sem `sh` no PATH do core, usar `.herdr/scripts/run-agent.ps1`; não criar shim/executável falso de `sh`. |
+| R-HC-012 | No Windows sem `sh` no PATH do core, usar `.herdr/scripts/run-agent.ps1`; não criar shim/executável falso de `sh`. Subagentes são delegados pelo wrapper via `orchestrator` + ferramenta `task`. |
 
 ## Comandos de referência
 
