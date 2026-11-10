@@ -25,7 +25,8 @@
 | [`blueprints/`](blueprints/api.md) | Extensões: API, Worker/Batch, compostas, IA |
 | [`../ai/`](../ai/README.md) | Fonte canônica de agentes, regras, prompts, skills e workflows |
 | [`../tasks/`](../tasks/TASK-TEMPLATE.md) | TASKs em formato único |
-| [`../governance/`](../governance/) | Política publicada para humanos |
+| [`../templates/`](../templates/README.md) | Modelos de SPEC, ADR, PLAN, teste e revisão de segurança |
+| [`../governance/`](../governance/README.md) | Política publicada para humanos |
 
 ## Status
 

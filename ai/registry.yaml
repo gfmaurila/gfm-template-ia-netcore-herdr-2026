@@ -12,6 +12,7 @@ canonical:
   prompts: ai/prompts
   skills: ai/skills
   workflows: ai/workflows
+  templates: templates
   tasks: tasks
   governance: governance
   reports: reports

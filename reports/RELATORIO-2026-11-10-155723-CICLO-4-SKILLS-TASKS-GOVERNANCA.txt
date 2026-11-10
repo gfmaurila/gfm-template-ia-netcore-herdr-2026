@@ -1,0 +1,91 @@
+RELATORIO-2026-11-10-155723-CICLO-4-SKILLS-TASKS-GOVERNANCA.txt
+================================================================================
+PROJETO: GFM.Template (herdr.dev)
+CICLO: 4 - Skills, workflows, templates, tasks e governance
+DATA: 2026-11-10 15:57:23 (local)
+BRANCH: main
+AGENTES: Orchestrator, Docs Writer, Architect
+================================================================================
+
+1. OBJETIVO
+--------------------------------------------------------------------------------
+Materializar as 11 skills, os 6 workflows, os modelos de documento, o formato de
+TASK e a politica publicada de governanca.
+
+2. ATIVIDADES
+--------------------------------------------------------------------------------
+- 11 skills canonicas em ai/skills/<id>/SKILL.md, com frontmatter name/description,
+  quando usar, passos, checklist e referencias.
+- Copias identicas em .opencode/skills/ e .claude/skills/ (11 cada).
+- 6 workflows em ai/workflows: descoberta, planejamento, feature, bugfix, revisao,
+  bootstrap; README atualizado com links.
+- Modelos em templates/: SPEC, ADR, PLAN, TEST-PLAN e SECURITY-REVIEW; TASK
+  permanece em tasks/TASK-TEMPLATE.md (fonte unica) com README explicando.
+- tasks/README.md, tasks/backlog/README.md e tasks/done/README.md.
+- governance/README.md + agent-policy, coding-standards, quality-gates e
+  security-policy; dependency-policy ja existente.
+- ai/skills/README.md e ai/registry.yaml atualizados (templates no canonico);
+  docs/README.md com links para templates e governance.
+
+3. ARQUIVOS
+--------------------------------------------------------------------------------
+- ai/skills/{spec-writing,adr-writing,task-decomposition,dotnet-clean-architecture,
+  testcontainers-integration,code-review,security-review,docker-compose-local,
+  github-actions-ci,documentation-style,herdr-orchestration}/SKILL.md
+- .opencode/skills/<11>/SKILL.md e .claude/skills/<11>/SKILL.md
+- ai/workflows/{descoberta,planejamento,feature,bugfix,revisao,bootstrap}.md
+- templates/README.md e templates/{specifications,architecture-decisions,
+  implementation-plans,test-plans,security-reviews}/<TEMPLATE>.md
+- templates/tasks/README.md
+- tasks/README.md, tasks/backlog/README.md, tasks/done/README.md
+- governance/README.md, governance/agent-policies/agent-policy.md,
+  governance/coding-standards/coding-standards.md,
+  governance/quality-gates/quality-gates.md, governance/security/security-policy.md
+- ai/skills/README.md, ai/workflows/README.md, ai/registry.yaml, docs/README.md,
+  docs/tasks/backlog.md (modificados)
+
+4. COMANDOS E VALIDACOES
+--------------------------------------------------------------------------------
+- Skills canonicas: total=11, name igual ao diretorio e description presente -> OK.
+- Adaptadores de skills: .opencode/skills OK (11), .claude/skills OK (11),
+  sem divergencia de nomes.
+- Workflows: 6 arquivos + README; links relativos OK.
+- Templates: 5 modelos + README; links relativos OK.
+- Governance: 6 arquivos; links relativos OK.
+- Varredura de links relativos em 36 arquivos dos diretorios novos: OK.
+- Varredura de mojibake nos diretorios novos: sem ocorrencias reais
+  (apenas caracteres acentuados legitimos como Ç e Ã em "NÃO").
+
+5. O QUE NAO PODE SER VALIDADO
+--------------------------------------------------------------------------------
+- Carregamento das skills pelo OpenCode em runtime nao executado; validacao
+  estrutural (frontmatter/nome) apenas.
+- Claude Code CLI ausente: skills em .claude/ nao validadas em runtime.
+- Modelos nao foram preenchidos em documentos reais (nao ha SPEC/ADR/PLAN em
+  execucao neste ciclo).
+- Backlog funcional continua bloqueado pela aprovacao das Fases 2-3.
+
+6. DECISOES
+--------------------------------------------------------------------------------
+- TASK tem fonte unica em tasks/TASK-TEMPLATE.md; templates/tasks apenas aponta,
+  evitando duas versoes divergentes.
+- Skills sao copiadas para OpenCode e Claude por serem formatos compativeis;
+  Codex/Copilot referenciam o diretorio canonico.
+- Governanca publica politica existente, sem criar regra nova.
+
+7. RISCOS
+--------------------------------------------------------------------------------
+- Duplicacao de skills entre canonico e adaptadores pode divergir; o ciclo de
+  manutencao exige recopiar no mesmo ciclo da mudanca.
+- Modelos sem uso real podem envelhecer; revisar junto com o primeiro SPEC/ADR.
+
+8. STATUS
+--------------------------------------------------------------------------------
+Concluido o conteudo do Ciclo 4. Commit e push pendentes no momento da geracao.
+
+9. PROXIMOS PASSOS
+--------------------------------------------------------------------------------
+- Commit: feat(ai): skills, templates, tasks e governanca.
+- Push para origin/main e registro do SHA.
+- Ciclo 5: GitHub Actions (validacao documental, links, frontmatter e YAML).
+================================================================================

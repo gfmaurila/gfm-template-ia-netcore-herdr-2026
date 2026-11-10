@@ -5,12 +5,12 @@ referenciam `ai/agents/`, `ai/rules/` e `templates/`.
 
 | ID | Workflow | Entrada | Saída | Gate final |
 |---|---|---|---|---|
-| WF-01 | Descoberta | workspace/requisito | diagnóstico | relatório |
-| WF-02 | Planejamento | requisito | SPEC + ADR + PLAN | aprovação |
-| WF-03 | Feature | TASK autorizada | código + testes + evidência | QG-01..12 |
-| WF-04 | Bugfix | falha reproduzível | correção + teste de regressão | QG-01..12 |
-| WF-05 | Revisão | diff | parecer | aprovação |
-| WF-06 | Bootstrap | template novo | projeto inicial | build + testes |
+| WF-01 | [Descoberta](descoberta.md) | workspace/requisito | diagnóstico | relatório |
+| WF-02 | [Planejamento](planejamento.md) | requisito | SPEC + ADR + PLAN | aprovação |
+| WF-03 | [Feature](feature.md) | TASK autorizada | código + testes + evidência | QG-01..12 |
+| WF-04 | [Bugfix](bugfix.md) | falha reproduzível | correção + teste de regressão | QG-01..12 |
+| WF-05 | [Revisão](revisao.md) | diff | parecer | aprovação |
+| WF-06 | [Bootstrap](bootstrap.md) | template novo | projeto inicial | build + testes |
 
 ## Fluxo padrão
 

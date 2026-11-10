@@ -5,17 +5,23 @@ A fonte canônica é este diretório; adaptadores copiam o formato exigido por c
 
 | ID | Skill | Papéis | Estado |
 |---|---|---|---|
-| spec-writing | Escrever SPEC verificável | Architect | planejada |
-| adr-writing | Registrar ADR | Architect | planejada |
-| task-decomposition | Decompor em TASKs | Architect | planejada |
-| dotnet-clean-architecture | Camadas e dependências .NET | Architect, Implementer | planejada |
-| testcontainers-integration | Integração com recurso descartável | Tester | planejada |
-| code-review | Revisão estruturada | Reviewer | planejada |
-| security-review | Revisão de segurança | Security Reviewer | planejada |
-| docker-compose-local | Ambiente local | DevOps | planejada |
-| github-actions-ci | Pipeline CI | DevOps | planejada |
-| documentation-style | Estilo documental | Docs Writer | planejada |
-| herdr-orchestration | Orquestração no Herdr | Orchestrator | planejada |
+| spec-writing | Escrever SPEC verificável | Architect | implementada |
+| adr-writing | Registrar ADR | Architect | implementada |
+| task-decomposition | Decompor em TASKs | Architect | implementada |
+| dotnet-clean-architecture | Camadas e dependências .NET | Architect, Implementer | implementada |
+| testcontainers-integration | Integração com recurso descartável | Tester | implementada |
+| code-review | Revisão estruturada | Reviewer | implementada |
+| security-review | Revisão de segurança | Security Reviewer | implementada |
+| docker-compose-local | Ambiente local | DevOps | implementada |
+| github-actions-ci | Pipeline CI | DevOps | implementada |
+| documentation-style | Estilo documental | Docs Writer | implementada |
+| herdr-orchestration | Orquestração no Herdr | Orchestrator | implementada |
+
+## Adaptadores
+
+- OpenCode: `.opencode/skills/<id>/SKILL.md`
+- Claude Code: `.claude/skills/<id>/SKILL.md`
+- Demais ferramentas: referenciam este diretório.
 
 ## Formato
 

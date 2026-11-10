@@ -2,6 +2,9 @@
 
 Status: `pending approval` (nada iniciado). Tarefas pequenas, com critério de aceite.
 
+Este arquivo descreve o backlog **funcional** do template. A conversão para o formato
+executável (`tasks/TASK-TEMPLATE.md`) ocorre após a aprovação do PLAN; ver `tasks/README.md`.
+
 ## T-001 — Esqueleto e build
 
 - Criar `global.json`, `Directory.Build.props`, `Directory.Packages.props`, `.editorconfig`,
