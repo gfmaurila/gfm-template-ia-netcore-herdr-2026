@@ -1,0 +1,135 @@
+RELATORIO — VERIFICACAO DOCUMENTAL: CONVENCAO src/back-end + src/front-end
+Data: 2026-11-10 18:42
+Workspace: C:\Work\dev\herdr.dev
+Branch: main
+Remoto: https://github.com/gfmaurila/gfm-template-ia-netcore-herdr-2026
+Status final: CONVENCAO REGISTRADA E PUBLICADA
+
+1. OBJETIVO
+Verificacao documental final: garantir que os agentes de IA conhecam a convencao
+de organizacao dos futuros projetos:
+
+    src/
+    |-- back-end/
+    `-- front-end/
+
+A convencao foi confirmada no template original (C:\Work\dev\template, somente
+leitura, escopo restrito a esta confirmacao, autorizado pelo responsavel) e,
+estando ausente na documentacao do workspace, foi registrada na documentacao
+canonica apropriada, sem inventar subpastas, tecnologias ou estruturas adicionais.
+
+2. ESCOPO E LIMITES
+- Escopo: documentacao (somente arquivos .md existentes); nenhum arquivo novo
+  alem deste relatorio.
+- Fora de escopo: codigo C#, aplicacao, solucao .NET, migrations, src/ real,
+  alteracao da arquitetura dos agentes homologados, novos ciclos de
+  implementacao, instalacao de dependencias.
+- Verificado: nenhum diretorio src/, back-end/ ou front-end/ foi criado.
+- O template original foi apenas LIDO (listagens de diretorios e 3 READMEs
+  estruturais); nenhum conteudo foi copiado, nenhum arquivo foi alterado la.
+
+3. VERIFICACAO INICIAL (antes da alteracao)
+- Busca por "back-end|front-end|backend|frontend" no workspace: 4 resultados,
+  nenhum relacionado a organizacao de src/ (apenas "backend de telemetria" em
+  observabilidade e pergunta Q-12).
+- Busca por "src/" em *.md: 16 resultados; documentacao existente descrevia
+  estrutura PLANA (projetos .NET diretamente sob src/), ex.: README.md,
+  docs/architecture/layers-and-modules.md, blueprints, local-development.md.
+- Conclusao: convencao AUSENTE na documentacao do workspace.
+
+4. CONFIRMACAO NO TEMPLATE ORIGINAL (somente leitura)
+- C:\Work\dev\template\src\ contem exatamente: back-end/, front-end/ e README.md.
+- src/README.md: back-end/ = referencia para servicos e APIs;
+  front-end/ = cenarios Web, Mobile e compartilhados.
+- src/back-end/README.md: area para APIs, Workers, Batch e demais hosts de
+  back-end; a arquitetura .NET existente permanece em docs/architecture/ e
+  blueprints/.
+- src/front-end/README.md: cenarios oficiais (Admin, Site, Landing Page,
+  Mobile, Shared) com stacks especificas NO TEMPLATE ORIGINAL.
+- Decisao: registrar APENAS a convencao de nivel superior (duas pastas) e o
+  proposito generico de cada uma. As stacks e subpastas de front-end do
+  template original NAO foram importadas (restricao: nao inventar/importar
+  subpastas, tecnologias ou estruturas adicionais).
+
+5. ALTERACOES REALIZADAS (9 arquivos)
+1. AGENTS.md (secao 6, Convencoes tecnicas): nova regra — src/ divide-se em
+   src/back-end/ e src/front-end/; projetos .NET em camadas sob src/back-end/;
+   src/front-end/ reservado ao front-end, sem tecnologia ou subestrutura
+   definidas nesta fase.
+2. ai/rules/architecture.md: nova regra executavel R-ARCH-011 ("src/ divide-se
+   em src/back-end/ e src/front-end/; projetos .NET sob src/back-end/",
+   verificacao: ArchitectureTests + revisao).
+3. docs/architecture/layers-and-modules.md: nova secao "Organizacao de src/"
+   com a arvore src/ |-- back-end/ `-- front-end/ e as regras associadas;
+   caminhos da "Estrutura interna proposta" aninhados sob src/back-end/.
+4. docs/blueprints/api.md: arvore de estrutura sob src/back-end/.
+5. docs/blueprints/composed-apps.md: arvore de estrutura sob src/back-end/.
+6. docs/blueprints/worker-batch.md: src/back-end/Gfm.Template.Host.Worker/.
+7. docs/blueprints/ai-app.md: src/back-end/Gfm.Template.Application/Ai/ e
+   src/back-end/Gfm.Template.Infrastructure/Ai/.
+8. docs/devops/local-development.md: dotnet run --project
+   src/back-end/Gfm.Template.Host.Api.
+9. README.md: arvore planejada com back-end/ e front-end/ sob src/; comando
+   dotnet run apontando para src/back-end/Gfm.Template.Host.Api.
+
+Obs.: os caminhos existentes dos projetos em camadas (Domain/Application/
+Infrastructure/Host.Api) foram apenas REANINHADOS sob src/back-end/ para
+coerencia com a convencao registrada; nenhum projeto, subpasta ou tecnologia
+nova foi criado ou especificado.
+
+6. VALIDACOES EXECUTADAS (evidencia real)
+- python scripts\validate-template.py
+  AVISO: PyYAML ausente: validacao de YAML ignorada
+  OK: validacao concluida (1 aviso(s))
+  EXIT=0
+- Test-Path src -> NO_SRC (nenhum diretorio src/ criado).
+- git diff --check -> EXIT=0 (apenas avisos LF/CRLF do Git, como no ciclo
+  anterior de homologacao).
+- Busca pos-alteracao por "src/Gfm" no workspace: 0 resultados (nenhuma
+  referencia plana remanescente; coerencia garantida).
+- git status: somente os 9 arquivos alterados + este relatorio.
+
+7. NAO VALIDADO / LIMITACOES
+- Validacao YAML (check_yaml do validate-template.py) nao executada:
+  PyYAML ausente no interpretador Python atual. Nao bloqueante: nenhum
+  arquivo YAML foi alterado neste ciclo (registro ai/registry.yaml intacto;
+  ultima validacao YAML bem-sucedida registrada no RELATORIO-FINAL-
+  HOMOLOGACAO-HERDR.txt). Nenhuma dependencia foi instalada (restricao).
+- Verificacao por ArchitectureTests: futura (exige codigo; Fase 4+).
+
+8. DECISOES
+- Registrar a convencao apenas no nivel src/back-end + src/front-end, sem
+  stacks/subpastas de front-end (restricao do responsavel).
+- R-ARCH-011 como regra executavel; documentacao arquitetural em
+  docs/architecture/layers-and-modules.md; instrucao canonica em AGENTS.md.
+- Adaptadores (.opencode/, .claude/, .codex/, .github/) nao alterados: eles
+  referenciam AGENTS.md e ai/, que ja carregam a convencao; o glob
+  applyTo "src/**/*.cs" (Copilot) continua cobrindo caminhos aninhados.
+
+9. RISCOS
+- Baixo: a convencao documentada diverge de estruturas do template original
+  em nivel de detalhe (front-end sem stack definida aqui); qualquer
+  detalhamento futuro exige ADR/aprovacao, ja registrado na propria regra.
+- Ate a Fase 4, a convencao e verificavel apenas por revisao documental.
+
+10. GIT E PUBLICACAO
+- Commit (tipo docs): registro da convencao + este relatorio.
+- Push para origin main e confirmacao via git ls-remote: SHAs registrados
+  abaixo apos a execucao.
+- Commit: 70a6fe6 (docs(architecture): registrar convencao src/back-end e
+  src/front-end; 9 arquivos, +32/-11).
+- Este relatorio e publicado em commit subsequente; HEAD/remote main pos-push:
+  <preenchido apos o push>
+
+11. PROXIMOS PASSOS
+1. Fase 3 (arquitetura/aprovacao) segue pendente de aprovacao explicita.
+2. Na implementacao, materializar src/back-end/ com os 4 projetos em camadas
+   e testes de arquitetura cobrindo R-ARCH-011.
+3. Definir stack de front-end apenas quando um projeto real exigir, via ADR.
+
+12. CONCLUSAO
+A convencao de organizacao src/back-end + src/front-end estava ausente e foi
+registrada na documentacao canonica (AGENTS.md, ai/rules e docs/architecture),
+com propagacao coerente para blueprints, devops e README. Nenhum codigo C#,
+nenhum diretorio src/ real, nenhuma alteracao nos agentes homologados e
+nenhuma dependencia instalada. Validacao estrutural executada com exit 0.
