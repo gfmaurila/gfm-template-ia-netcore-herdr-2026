@@ -119,7 +119,11 @@ nova foi criado ou especificado.
 - Commit: 70a6fe6 (docs(architecture): registrar convencao src/back-end e
   src/front-end; 9 arquivos, +32/-11).
 - Este relatorio e publicado em commit subsequente; HEAD/remote main pos-push:
-  <preenchido apos o push>
+  e22c86ae78247852371e9dc9a389db68d9e61243 (commit do relatorio).
+- Push: aa229aa..e22c86a main -> main, exit 0.
+- Confirmacao: git ls-remote origin refs/heads/main retornou
+  e22c86ae78247852371e9dc9a389db68d9e61243, igual ao git rev-parse HEAD.
+  Publicacao confirmada em 2026-11-10.
 
 11. PROXIMOS PASSOS
 1. Fase 3 (arquitetura/aprovacao) segue pendente de aprovacao explicita.
