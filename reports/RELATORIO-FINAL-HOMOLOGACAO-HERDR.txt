@@ -1,0 +1,164 @@
+RELATORIO FINAL — HOMOLOGACAO HERDR / GFM TEMPLATE IA
+Data: 2026-11-10
+Workspace: C:\Work\dev\herdr.dev
+Branch: main
+Remoto: https://github.com/gfmaurila/gfm-template-ia-netcore-herdr-2026
+Commit de implementacao: 34237003125d61d1042c75d7a97d298b7188f9a5
+Status final: HOMOLOGADO (mecanismo oficial Windows e 8 agentes)
+
+1. OBJETIVO
+Finalizar a infraestrutura de agentes IA + Herdr: resolver a execucao no
+Windows, corrigir a selecao de agentes/subagentes no OpenCode 1.19.0,
+homologar os 8 papeis com testes reais, validar as ferramentas, executar a
+validacao final e publicar o resultado. Nenhum codigo C#/.NET foi iniciado.
+
+2. ESCOPO E LIMITES
+- Escopo: template documental, camada de agentes, adaptadores, Herdr e runtime
+  OpenCode no Windows.
+- Fora de escopo: aplicacao C#, migrations, pipeline .NET, Docker/Compose com
+  aplicacao, Fase 3 e Ciclo 8.
+- Nenhuma alteracao global de PATH, nenhum shim de `sh`, nenhum `hc server
+  stop/restart` no core padrao e nenhum push forcado.
+- `leia.txt` e o manual do Herdr permaneceram somente leitura.
+
+3. AMBIENTE VERIFICADO
+- Windows 11 Pro 10.0.26300 (AMD64)
+- PowerShell 5.1 e PowerShell 7.6.9
+- Herdr Core hc 0.1.19; Herdr App 0.1.14
+- OpenCode 1.19.0
+- Codex CLI 0.163.0
+- GitHub Copilot CLI 1.0.108
+- Claude Code CLI: NAO INSTALADO
+- Git 2.55.0.windows.5
+- `sh.exe` existe em `C:\Program Files\Git\bin\sh.exe`, mas nao esta no PATH
+  visivel pelo core do Herdr.
+- `gh` 2.102.0 nao autenticado; o push usou o credential helper `manager`.
+
+4. SOLUCAO DEFINITIVA PARA O WINDOWS
+O template nativo do Herdr continua bloqueado no Windows:
+  hc run --bg --name native-test --cwd C:\Work\dev\herdr.dev gfm-architect "Responda apenas NATIVE_OK."
+Resultado:
+  {"error":{"hint":"check the program name and cwd","kind":"spawn_failed",
+  "message":"cannot start \"sh\": sh: not found on PATH"}}
+O core reconstroi o PATH a partir do registro do Windows; prefixar o PATH do
+processo nao resolve. A correcao nativa exigiria `sh` no PATH do core
+(alteracao global nao autorizada).
+
+Mecanismo oficial adotado no Windows: `.herdr/scripts/run-agent.ps1`.
+- Le `.herdr/templates/gfm-<papel>.md`.
+- Valida frontmatter e o comando `opencode --agent <papel>`.
+- Para papeis primarios, executa `opencode run --agent <papel>` com o corpo do
+  template e a tarefa.
+- Para subagentes, delega via `orchestrator` e ferramenta `task`, repassando o
+  corpo do template e a tarefa ao subagente.
+- Suporta `-DryRun`.
+- Nao cria shim/executavel falso de `sh`.
+
+Comando de execucao:
+  hc run --bg --name <papel> --cwd C:\Work\dev\herdr.dev powershell -NoProfile -ExecutionPolicy Bypass -File .herdr/scripts/run-agent.ps1 -Role <papel> -Task "<tarefa>"
+
+5. CORRECAO DA SELECAO DE AGENTES
+No OpenCode 1.19.0, `opencode run --agent <subagente>` emite:
+  agent "<papel>" is a subagent, not a primary agent. Falling back to default agent.
+Os papeis `tester`, `reviewer`, `security-reviewer` e `docs-writer` sao
+subagentes e nao podem ser selecionados diretamente pela CLI.
+
+Correcao aplicada: o wrapper chama `opencode run --agent orchestrator` com uma
+instrucao explicita para usar a ferramenta `task` uma unica vez com
+`subagent_type=<papel>` e repassar o prompt do template ao subagente. O log do
+OpenCode registra `agent=<papel> mode=subagent`, confirmando que o papel correto
+foi carregado.
+
+6. HOMOLOGACAO DOS 8 AGENTES
+Todos os testes abaixo foram executados via Herdr, com `hc wait` e `hc read`,
+exit code 0 e token de papel na tela.
+
+| Papel | Modo | Fluxo | Resultado | Evidencia |
+|---|---|---|---|---|
+| architect | primary | opencode --agent architect | ARCHITECT_OK | exit 0; `agent=architect mode=primary` |
+| implementer | primary | opencode --agent implementer | IMPLEMENTER_OK | exit 0; `agent=implementer mode=primary` |
+| tester | subagent | wrapper -> orchestrator -> task(tester) | TESTER_OK | exit 0; `agent=tester mode=subagent` |
+| reviewer | subagent | wrapper -> orchestrator -> task(reviewer) | REVIEWER_OK | exit 0; `agent=reviewer mode=subagent` |
+| security-reviewer | subagent | wrapper -> orchestrator -> task(security-reviewer) | SECURITY_REVIEWER_OK | exit 0; `agent=security-reviewer mode=subagent` |
+| devops | primary | opencode --agent devops | DEVOPS_OK | exit 0; `agent=devops mode=primary` |
+| docs-writer | subagent | wrapper -> orchestrator -> task(docs-writer) | DOCS_WRITER_OK | exit 0; `agent=docs-writer mode=subagent` |
+| orchestrator | primary | opencode --agent orchestrator | ORCHESTRATOR_OK | exit 0; `agent=orchestrator mode=primary` |
+
+Terminais usados: hom-architect, hom-implementer, hom-devops,
+hom-orchestrator, hom-tester, hom-reviewer, hom-security, hom-docs. Todos foram
+removidos com `hc rm` apos a coleta. O terminal t1 (sessao atual) e o t2
+(preexistente) nao foram alterados.
+
+7. VALIDACAO DAS FERRAMENTAS
+| Ferramenta | Versao | Resultado |
+|---|---|---|
+| OpenCode | 1.19.0 | 8 papeis homologados; `opencode agent list` mostra os 8 agentes customizados com modos primary/subagent |
+| Herdr Core | hc 0.1.19 | `hc templates` lista 8 templates `gfm-*`; wrapper executou os 8 papeis |
+| Herdr App | 0.1.14 | presente e versionado |
+| Codex CLI | 0.163.0 | `codex exec --sandbox read-only --skip-git-repo-check --ephemeral --color never "Responda apenas CODEX_OK..."` respondeu CODEX_OK, exit 0; erro de auth do MCP Postman nao bloqueante |
+| Copilot CLI | 1.0.108 | `copilot -p "Responda apenas COPILOT_OK..." -s --disable-client-telemetry` respondeu COPILOT_OK, exit 0 |
+| Claude Code | ausente | nao homologado em runtime |
+| GitHub CLI | 2.102.0 | nao autenticado; push via credential helper funcionou |
+
+8. VALIDACAO FINAL
+- `python scripts/validate-template.py` (com `REQUIRE_YAML=1`):
+  OK: validacao concluida (0 aviso(s)); exit 0.
+- `git diff --check`: exit 0 (apenas avisos LF/CRLF do Git).
+- Parser PowerShell:
+  PARSE_OK install-templates.ps1
+  PARSE_OK run-agent.ps1
+- YAML: `YAML_OK roles=8 adapters=4`.
+- JSON `.opencode/opencode.json`: `JSON_OK instructions=3 skills_paths=1`.
+- `hc templates`: 8 templates.
+- `opencode agent list`: 15 agentes no total; 8 customizados do template.
+- `src/`: ausente (`NO_SRC`), confirmando que nenhum codigo C# foi criado.
+- Template nativo: BLOQUEADO com `cannot start "sh": sh: not found on PATH`.
+- Terminais de homologacao: limpos com `hc rm`; nenhum `hc server stop/restart`.
+
+9. ARQUIVOS ALTERADOS
+- .herdr/scripts/run-agent.ps1
+- .herdr/README.md
+- AGENTS.md
+- ai/registry.yaml
+- ai/rules/herdr-operations.md
+- docs/ai/homologation.md
+- docs/ai/multi-tool-matrix.md
+- docs/ai/opencode-herdr.md
+- reports/RELATORIO-FINAL-HOMOLOGACAO-HERDR.txt (este relatorio)
+
+10. LIMITACOES E RISCOS RESIDUAIS
+- Template nativo do Herdr continua bloqueado no Windows sem `sh` no PATH do
+  core. Correcao exige alteracao global e autorizacao explicita.
+- TUI do OpenCode dentro do Herdr nao foi exercitado; a homologacao cobre a
+  execucao one-shot via wrapper.
+- Claude Code CLI nao esta instalado; adaptador permanece estrutural.
+- Codex emitiu erro de autenticacao do MCP Postman durante o smoke test; a
+  resposta CODEX_OK foi produzida e o erro nao bloqueou o teste.
+- `gh` nao esta autenticado; o push depende do credential helper.
+- Pipeline .NET, Docker/Compose com aplicacao e Fase 3 continuam fora do escopo.
+
+11. GIT E PUBLICACAO
+- Commit de implementacao: 34237003125d61d1042c75d7a97d298b7188f9a5
+  (fix(herdr): homologar execucao Windows e subagentes).
+- Push para `origin main`: sucesso (28222f7..3423700).
+- `git ls-remote origin refs/heads/main` confirmou o SHA
+  34237003125d61d1042c75d7a97d298b7188f9a5 no remoto.
+- Este relatorio e publicado em commit subsequente; o SHA final do HEAD e
+  informado na entrega.
+- Link: https://github.com/gfmaurila/gfm-template-ia-netcore-herdr-2026
+
+12. PROXIMOS PASSOS
+1. Manter o wrapper como mecanismo oficial no Windows.
+2. Se o template nativo for obrigatorio, autorizar `sh` no PATH do core
+   (alteracao global) e revalidar.
+3. Validar o TUI do OpenCode autenticado dentro do Herdr.
+4. Instalar/autenticar Claude Code se a homologacao desse adaptador for exigida.
+5. Configurar o Space do projeto no Herdr.
+6. Aprovar as Fases 2-3 antes de iniciar codigo e pipeline .NET.
+
+13. CONCLUSAO
+O mecanismo oficial Windows e os 8 papeis foram homologados com execucao real,
+exit 0 e evidencia de que cada papel recebeu suas instrucoes (log
+`agent=<papel> mode=primary|subagent`). OpenCode, Herdr, Codex e Copilot foram
+validados em runtime. Permanecem como pendencias nao bloqueantes o template
+nativo do Herdr, o TUI e o Claude Code. Nenhum codigo C#/.NET foi iniciado.
