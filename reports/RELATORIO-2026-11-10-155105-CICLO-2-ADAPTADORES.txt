@@ -1,0 +1,82 @@
+RELATORIO-2026-11-10-155105-CICLO-2-ADAPTADORES.txt
+================================================================================
+PROJETO: GFM.Template (herdr.dev)
+CICLO: 2 - Adaptadores multi-ferramenta
+DATA: 2026-11-10 15:51:05 (local)
+BRANCH: main
+AGENTES: Orchestrator, Docs Writer, Reviewer (estrutural)
+================================================================================
+
+1. OBJETIVO
+--------------------------------------------------------------------------------
+Criar adaptadores finos para OpenCode, Claude Code, Codex CLI e GitHub Copilot,
+referenciando AGENTS.md e ai/ sem duplicar politica, e validar formato/estrutura.
+
+2. ATIVIDADES
+--------------------------------------------------------------------------------
+- OpenCode: .opencode/opencode.json, 8 agentes e 6 comandos.
+- Claude Code: 8 subagentes, 6 comandos (adaptador estrutural, CLI ausente).
+- Codex: 8 prompts customizados, README e mapeamento de regras.
+- Copilot: instrucoes globais, 8 custom agents, 3 instructions por caminho,
+  6 prompt files e README.
+- Matriz multi-ferramenta ja publicada no Ciclo 1 permanece como referencia.
+
+3. ARQUIVOS
+--------------------------------------------------------------------------------
+- .opencode/opencode.json
+- .opencode/agents/{architect,implementer,tester,reviewer,security-reviewer,devops,docs-writer,orchestrator}.md
+- .opencode/commands/{spec,adr,plan,task,review,ciclo}.md
+- .claude/agents/<8 papeis>.md
+- .claude/commands/{spec,adr,plan,task,review,ciclo}.md
+- .codex/README.md
+- .codex/prompts/<8 papeis>.md
+- .codex/rules/README.md
+- .github/copilot-instructions.md
+- .github/README.md
+- .github/agents/<8 papeis>.agent.md
+- .github/instructions/{architecture,tests,docs}.instructions.md
+- .github/prompts/{spec,adr,plan,task,review,ciclo}.prompt.md
+
+4. COMANDOS E VALIDACOES
+--------------------------------------------------------------------------------
+- Presenca dos 8 papeis em cada adaptador (OpenCode, Claude, Codex, Copilot):
+  count=8, missing vazio, extra vazio em todos.
+- Frontmatter: todos os agentes/comandos/prompts iniciam com "---" e possuem 2
+  delimitadores; instructions possuem applyTo.
+- Links relativos em .opencode/.claude/.codex/.github: OK.
+- .opencode/opencode.json convertido por ConvertFrom-Json: JSON valido.
+- Frontmatter do OpenCode usa apenas campos documentados (description, mode,
+  permission); nenhum campo canonico extra vaza para options.
+
+5. O QUE NAO PODE SER VALIDADO
+--------------------------------------------------------------------------------
+- OpenCode: config nao foi carregado em runtime (exige reiniciar a sessao).
+  Formato validado contra a documentacao/skill instalada, nao por execucao.
+- Claude Code: CLI ausente; adaptador nao validado em runtime.
+- Codex: subagents/skills nativos nao validados em runtime (0.163.0).
+- Copilot: custom agents/instructions/prompts sem validacao runtime.
+- Nenhum build/teste de aplicacao: nao ha codigo nesta fase.
+
+6. DECISOES
+--------------------------------------------------------------------------------
+- Adaptadores referenciam a fonte canonica em vez de copiar o texto integral.
+- IDs de prompt sao citados nos comandos para manter rastreabilidade.
+- Campos de frontmatter limitados ao que cada ferramenta documenta.
+- Ferramentas sem runtime permanecem documentadas como "nao validado".
+
+7. RISCOS
+--------------------------------------------------------------------------------
+- Divergencia entre documentacao publica e versao instalada (OpenCode V1/V2):
+  mitigada por validacao estrutural e registro em multi-tool-matrix.
+- Mudanca de formato upstream pode quebrar adaptadores: revisar a cada upgrade.
+
+8. STATUS
+--------------------------------------------------------------------------------
+Concluido o conteudo do Ciclo 2. Commit e push pendentes no momento da geracao.
+
+9. PROXIMOS PASSOS
+--------------------------------------------------------------------------------
+- Commit: feat(adapters): adaptadores multi-ferramenta.
+- Push para origin/main e registro do SHA.
+- Ciclo 3: templates e workflows do Herdr (prefixo gfm-).
+================================================================================
