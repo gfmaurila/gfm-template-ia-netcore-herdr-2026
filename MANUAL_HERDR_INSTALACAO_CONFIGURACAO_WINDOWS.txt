@@ -1,0 +1,213 @@
+MANUAL HERDR - INSTALACAO E CONFIGURACAO INICIAL NO WINDOWS
+Projeto: GFM.Template (.NET + IA)
+Data: 10/11/2026
+Ambiente: Windows / PowerShell
+
+======================================================================
+1. OBJETIVO
+======================================================================
+Instalar o Herdr, validar o aplicativo grafico e o Herdr Core, corrigir
+problemas de reconhecimento dos comandos no PowerShell e preparar o
+ambiente para trabalhar com o Codex e o repositorio GFM.Template.
+
+Este manual distingue passos efetivamente validados dos proximos passos
+que ainda dependem de verificacao no computador.
+
+======================================================================
+2. INSTALACAO DO HERDR
+======================================================================
+Abra o PowerShell e execute o comando de instalacao utilizado:
+
+powershell -c "irm https://releases.herdr.dev/app/install.ps1 | iex"
+
+ATENCAO: esse comando baixa e executa um script remoto. Antes de
+reutiliza-lo, confirme a procedencia do endereco e, preferencialmente,
+inspecione o script ou utilize o instalador oficial disponibilizado
+pelo projeto: https://herdr.dev/
+
+Resultado observado na instalacao realizada:
+- Herdr App: 0.1.14
+- Herdr Core (hc): 0.1.19
+- Arquivos do Core em:
+  C:\Users\gfmau\AppData\Local\Programs\herdr-core
+- Aplicativo em:
+  C:\Users\gfmau\AppData\Local\Programs\herdr-app
+
+As versoes e os caminhos podem mudar em instalacoes futuras.
+
+======================================================================
+3. PROBLEMA ENCONTRADO: COMANDOS NAO RECONHECIDOS
+======================================================================
+Logo apos a instalacao, os comandos abaixo falharam:
+
+hc --version
+herdr-app
+
+Motivo confirmado: os caminhos de instalacao estavam registrados no
+PATH do usuario, mas nao no PATH da sessao PowerShell em uso.
+
+Diagnostico (somente leitura):
+
+$corePath = "$env:LOCALAPPDATA\Programs\herdr-core"
+Get-ChildItem $corePath -Recurse -File | Select-Object FullName
+
+$env:PATH -split ';' | Where-Object { $_ -match 'herdr' }
+
+[Environment]::GetEnvironmentVariable('Path','User') -split ';' |
+    Where-Object { $_ -match 'herdr' }
+
+Get-ChildItem "$env:LOCALAPPDATA\Programs" -Directory |
+    Where-Object { $_.Name -match 'herdr' } |
+    Select-Object FullName
+
+Na maquina examinada, o PATH do usuario continha:
+C:\Users\gfmau\AppData\Local\Programs\herdr-app
+C:\Users\gfmau\AppData\Local\Programs\herdr-core
+
+======================================================================
+4. CORRECAO DO PATH NA SESSAO ATUAL
+======================================================================
+Primeiro, tente abrir um novo PowerShell. Se o problema persistir e
+os diretorios estiverem no PATH do usuario, execute:
+
+$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' +
+            [Environment]::GetEnvironmentVariable('Path','User')
+
+Essa operacao atualiza o PATH apenas na sessao atual. Ela nao grava
+alteracoes permanentes no registro do Windows.
+
+Valide:
+
+hc --version
+Get-Command herdr-app
+
+Resultado confirmado:
+- hc --version retornou: hc 0.1.19
+- Get-Command herdr-app encontrou herdr-app.exe 0.1.14.0
+
+Se ainda houver falha, confira a existencia dos executaveis:
+
+Test-Path "$env:LOCALAPPDATA\Programs\herdr-core\hc.exe"
+Test-Path "$env:LOCALAPPDATA\Programs\herdr-app\herdr-app.exe"
+
+Nao reinstale automaticamente antes de verificar os arquivos e o PATH.
+
+======================================================================
+5. ABRIR O APLICATIVO
+======================================================================
+Execute:
+
+herdr-app
+
+Alternativamente, use o menu Iniciar do Windows.
+
+Executavel confirmado na maquina:
+C:\Users\gfmau\AppData\Local\Programs\herdr-app\herdr-app.exe
+
+O aplicativo abriu com a tela 'Welcome to Herdr (BETA)'.
+Avance em 'Next' ate concluir a apresentacao inicial.
+
+A secao 'Coming from herdr?' trata de migracao de configuracoes de
+versoes anteriores. Em uma instalacao nova, nao e necessario executar
+as instrucoes de migracao.
+
+======================================================================
+6. INTERFACE PRINCIPAL: ITENS IDENTIFICADOS
+======================================================================
+Na tela inicial apos o assistente foram observados:
+
+- Spaces: painel lateral esquerdo para organizar espacos de trabalho.
+- Espaco '~': espaco inicial associado ao diretorio do usuario.
+- Terminal 'pwsh': PowerShell integrado ao Herdr.
+- Agents: painel de acompanhamento dos agentes.
+- Botao '+' ao lado de Spaces: entrada para adicionar um espaco.
+
+O terminal integrado iniciou em:
+PS C:\Users\gfmau>
+
+A abertura da interface e do terminal foi confirmada.
+
+======================================================================
+7. CONFIGURACAO DO GFM.TEMPLATE - AINDA PENDENTE
+======================================================================
+Objetivo: associar o repositorio GFM.Template existente a um Space,
+sem criar um projeto duplicado e sem alterar arquivos prematuramente.
+
+Passos planejados, ainda nao executados/validados:
+
+1. Localizar o diretorio real do GFM.Template no computador.
+2. Verificar o estado do repositorio e os remotos Git.
+3. Na interface do Herdr, clicar no '+' ao lado de Spaces.
+4. Inspecionar as opcoes exibidas e selecionar a pasta existente.
+5. Abrir um terminal no espaco correspondente ao repositorio.
+6. Confirmar se o Codex CLI esta instalado e autenticado:
+
+   Get-Command codex -ErrorAction SilentlyContinue
+   codex --version
+
+7. Se o Codex estiver disponivel, inicia-lo no diretorio correto:
+
+   codex
+
+8. Solicitar ao Codex uma auditoria inicial SOMENTE LEITURA.
+
+Nao se deve presumir que o caminho C:\Work\dev\herdr.dev seja o
+repositorio GFM.Template; ele foi apenas o diretorio do PowerShell
+usado durante a instalacao.
+
+======================================================================
+8. INSTRUCAO INICIAL SUGERIDA AO CODEX (SOMENTE LEITURA)
+======================================================================
+Analise o repositorio GFM.Template e sua documentacao. Identifique a
+estrutura atual, as decisoes arquiteturais, as instrucoes para agentes,
+os requisitos de testes, Docker, GitHub Actions e integracao com IA.
+Classifique o que esta implementado, pendente ou indefinido. Nao
+modifique arquivos, nao gere codigo, nao execute operacoes destrutivas
+e nao publique alteracoes. Nao incorpore dados, nomes, configuracoes
+ou integracoes de clientes dos projetos de referencia. Apresente um
+relatorio de diagnostico e um plano por etapas e aguarde aprovacao.
+
+======================================================================
+9. REQUISITOS DO PROJETO QUE DEVEM SER PRESERVADOS
+======================================================================
+- Arquitetura e organizacao do template .NET + IA conforme decisoes
+  documentadas no repositorio.
+- Analisar os projetos de referencia projeto-haf e projeto-maf apenas
+  para compreender padroes, sem copiar informacoes de clientes.
+- Testes unitarios e de integracao aplicaveis as implementacoes.
+- Banco de testes isolado e descartavel, com criacao de estruturas,
+  execucao e limpeza/drop garantida.
+- Docker para infraestrutura e testes locais.
+- CI/CD centrado em GitHub Actions.
+- Nao iniciar geracao ou alteracoes de codigo sem autorizacao.
+
+OBSERVACAO SOBRE O GIT:
+Na etapa anterior do projeto, um commit local havia sido preparado,
+mas o push remoto falhou por falta de autenticacao. Portanto, e
+necessario verificar o estado local e remoto antes de publicar algo.
+
+======================================================================
+10. CHECKLIST DE VALIDACAO
+======================================================================
+[X] Script de instalacao executado com mensagem de sucesso.
+[X] Arquivos do Herdr Core encontrados.
+[X] Arquivos do aplicativo encontrados.
+[X] PATH do usuario continha os diretorios do Herdr.
+[X] PATH da sessao corrigido.
+[X] 'hc --version' retornou 0.1.19.
+[X] 'herdr-app' abriu a interface grafica.
+[X] Assistente inicial concluido.
+[X] Terminal PowerShell integrado exibido.
+[ ] Localizacao do repositorio GFM.Template confirmada.
+[ ] Space do GFM.Template configurado.
+[ ] Codex CLI validado no Herdr.
+[ ] Auditoria somente leitura do repositorio realizada.
+[ ] Plano de implementacao aprovado.
+
+======================================================================
+11. REFERENCIAS
+======================================================================
+Site do projeto: https://herdr.dev/
+Endereco do script utilizado: https://releases.herdr.dev/app/install.ps1
+
+FIM DO MANUAL

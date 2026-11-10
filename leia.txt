@@ -1,0 +1,56 @@
+
+
+C:\Work\dev\herdr.dev
+
+https://herdr.dev/download/
+
+https://herdr.dev/?utm_source=chatgpt.com
+
+-----
+
+Preciso que você analise detalhadamente o seguinte repositório:
+
+https://github.com/gfmaurila/gfm-template-ia-netcore-2026
+
+Utilize esse repositório como referência para criar um novo **template de desenvolvimento assistido por Inteligência Artificial**, utilizando o **Herdr** como ferramenta de gerenciamento de agentes.
+
+O novo template deverá seguir os padrões de organização, arquitetura, estrutura de diretórios e documentação encontrados no repositório de referência.
+
+Com base nessa análise, crie e configure:
+
+- **Agents:** agentes especializados para OpenCode, Claude Code, Codex e GitHub Copilot.
+- **Tasks:** tarefas estruturadas para análise, planejamento, implementação, testes, revisão e validação.
+- **Skills:** habilidades reutilizáveis para diferentes atividades de desenvolvimento.
+- **Workflows:** fluxos de trabalho padronizados para o ciclo completo de desenvolvimento.
+- **Rules:** regras e diretrizes de arquitetura, qualidade, segurança e boas práticas.
+- **Prompts:** instruções reutilizáveis para os agentes de IA.
+- **Documentação:** arquivos Markdown explicando a arquitetura, a organização dos diretórios, as responsabilidades dos agentes e os procedimentos de utilização.
+
+**Repositório de referência:**
+
+Caso seja mais conveniente, o projeto também está disponível localmente em:
+
+`C:\Work\dev\template`
+
+**Diretório de destino do novo template:**
+
+`C:\Work\dev\herdr.dev`
+
+### Requisitos importantes
+
+1. Analise primeiro toda a estrutura do repositório de referência, incluindo os arquivos de configuração, agentes, tarefas, skills, workflows e documentação.
+2. Preserve os padrões arquiteturais e organizacionais relevantes, adaptando-os ao funcionamento do Herdr.
+3. Crie uma estrutura organizada, modular, reutilizável e preparada para evolução.
+4. Garanta a compatibilidade das instruções com OpenCode, Claude Code, Codex e GitHub Copilot, respeitando as particularidades de cada ferramenta.
+5. Não modifique o repositório original. Ele deverá ser utilizado exclusivamente como referência.
+6. Não copie credenciais, segredos, dados sensíveis ou configurações específicas de clientes.
+7. Antes de sobrescrever qualquer arquivo existente no diretório de destino, identifique possíveis conflitos e apresente as alterações propostas.
+8. Documente todos os componentes criados e explique como utilizá-los no Herdr.
+
+**Objetivo final:** construir um template completo de engenharia de software assistida por IA, tomando como referência o projeto existente, mas com uma estrutura própria, organizada e integrada ao Herdr, permitindo gerenciar agentes especializados durante todo o ciclo de desenvolvimento.
+
+Antes de iniciar a implementação, apresente um diagnóstico do repositório original, a estrutura de diretórios proposta e um plano de execução. Aguarde minha aprovação para prosseguir.
+
+
+
+
