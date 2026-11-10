@@ -8,7 +8,7 @@
 ## Estrutura
 
 ```text
-src/
+src/back-end/
   Gfm.Template.Domain/
   Gfm.Template.Application/
   Gfm.Template.Infrastructure/

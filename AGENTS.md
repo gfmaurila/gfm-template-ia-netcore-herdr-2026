@@ -95,6 +95,9 @@ Nunca avançar de gate sem aprovação.
 - Nomes de tipos em inglês; documentação em pt-BR; texto de API em inglês (a confirmar — Q-08).
 - Dependências: `Domain` não referencia ninguém; `Application` → `Domain`;
   `Infrastructure` → `Application`/`Domain`; `Host.Api` → `Infrastructure`/`Application`.
+- Organização do código: `src/` divide-se em `src/back-end/` e `src/front-end/`; os projetos
+  .NET em camadas ficam sob `src/back-end/`; `src/front-end/` é reservado ao front-end,
+  sem tecnologia ou subestrutura definidas nesta fase.
 - Regras de camada são verificadas por testes de arquitetura, não por disciplina manual.
 - Sem comentários óbvios; comentar apenas decisões não evidentes.
 - Sem `MediatR`/`FluentAssertions` por risco de licenciamento (ver ADR-0005/0008).

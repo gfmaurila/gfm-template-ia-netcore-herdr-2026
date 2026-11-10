@@ -10,12 +10,12 @@
 ## Estrutura
 
 ```text
-src/Gfm.Template.Application/Ai/
+src/back-end/Gfm.Template.Application/Ai/
   IAiChatClient.cs
   IAiEmbeddingClient.cs
   AiOptions.cs
   Prompts/                 # prompts versionados (ou /prompts)
-src/Gfm.Template.Infrastructure/Ai/
+src/back-end/Gfm.Template.Infrastructure/Ai/
   NullAiClient.cs          # default
   OpenAiCompatibleClient.cs
   OllamaClient.cs          # opcional

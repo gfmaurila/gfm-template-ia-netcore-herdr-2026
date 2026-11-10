@@ -15,6 +15,7 @@ Fonte executável. A política publicada para humanos está em
 | R-ARCH-008 | `Domain` não conhece HTTP, `ProblemDetails` nem serialização. | ArchitectureTests |
 | R-ARCH-009 | Módulos conversam por contratos/DTOs, não por entidades internas. | Revisão |
 | R-ARCH-010 | Exceção a estas regras exige ADR aprovado. | Revisão |
+| R-ARCH-011 | `src/` divide-se em `src/back-end/` e `src/front-end/`; projetos .NET sob `src/back-end/`. | ArchitectureTests + revisão |
 
 ## Critério de bloqueio
 

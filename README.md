@@ -67,6 +67,8 @@ herdr.dev/
 ├─ scripts/                  # validação estrutural do template
 ├─ docs/                     # ver docs/README.md
 ├─ src/                      # Fase 4+ (implementação)
+│  ├─ back-end/              # projetos .NET em camadas
+│  └─ front-end/             # reservado ao front-end (quando exigido)
 ├─ tests/                    # Fase 4+ (implementação)
 ├─ deploy/                   # Fase 5 (Docker/Compose)
 ├─ global.json               # pin do SDK (implementação)
@@ -112,7 +114,7 @@ Comece por [`docs/README.md`](docs/README.md). Destaques:
 dotnet restore
 dotnet build -warnaserror
 dotnet test
-dotnet run --project src/Gfm.Template.Host.Api
+dotnet run --project src/back-end/Gfm.Template.Host.Api
 ```
 
 Docker Compose e CI serão validados com execução comprovada na fase de implementação.

@@ -9,15 +9,30 @@
 | `Gfm.Template.Infrastructure` | EF Core/Npgsql, repositórios, migrações, adaptadores de IA, relógio, telemetria | Application, Domain |
 | `Gfm.Template.Host.Api` | Endpoints HTTP, middleware, DI, configuração, OpenAPI, health checks | Application, Infrastructure |
 
+## Organização de `src/`
+
+`src/` divide-se em duas áreas de nível superior:
+
+```text
+src/
+├─ back-end/    # hosts e serviços .NET: os projetos em camadas descritos abaixo
+└─ front-end/   # front-end do projeto, quando exigido (reservado nesta fase)
+```
+
+- Os projetos .NET em camadas ficam sob `src/back-end/`.
+- `src/front-end/` é reservado ao front-end; tecnologia e subestrutura só serão definidas
+  quando um projeto as exigir, com aprovação registrada.
+- Nenhum outro nível intermediário sob `src/` está definido; ampliações exigem ADR.
+
 ## Estrutura interna proposta
 
 ```text
-src/Gfm.Template.Domain/
+src/back-end/Gfm.Template.Domain/
 ├─ Abstractions/            Entity, AggregateRoot, ValueObject, IDomainEvent
 ├─ Catalog/Items/           Item (agregado), ItemStatus, ItemCreated (evento)
 └─ Exceptions/              DomainException
 
-src/Gfm.Template.Application/
+src/back-end/Gfm.Template.Application/
 ├─ Abstractions/            IClock, IUnitOfWork, ICurrentUser (se necessário)
 ├─ Messaging/               ICommand, IQuery, ICommandHandler, dispatcher mínimo
 ├─ Common/Behaviors/        validação, logging
@@ -28,13 +43,13 @@ src/Gfm.Template.Application/
 ├─ Common/Errors/           Result, Error, mapeamento para ProblemDetails
 └─ Ai/                      IAiChatClient, IAiEmbeddingClient, AiOptions, contratos
 
-src/Gfm.Template.Infrastructure/
+src/back-end/Gfm.Template.Infrastructure/
 ├─ Persistence/             AppDbContext, configurações, migrações, repositórios
 ├─ Ai/                      NullAiClient (padrão), OpenAiCompatibleClient (opcional)
 ├─ Time/                    SystemClock
 └─ DependencyInjection.cs
 
-src/Gfm.Template.Host.Api/
+src/back-end/Gfm.Template.Host.Api/
 ├─ Endpoints/Catalog/       ItemsEndpoints (Minimal API)
 ├─ Middleware/              exception handler, correlation id
 ├─ Configuration/           options + validação de configuração

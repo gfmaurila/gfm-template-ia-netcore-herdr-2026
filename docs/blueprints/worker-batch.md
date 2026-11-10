@@ -10,7 +10,7 @@
 ## Estrutura proposta
 
 ```text
-src/Gfm.Template.Host.Worker/
+src/back-end/Gfm.Template.Host.Worker/
   Program.cs              # Generic Host
   Jobs/                   # jobs idempotentes
   Scheduling/             # agendamento (cron/timer)

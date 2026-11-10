@@ -17,7 +17,7 @@
 ```powershell
 dotnet restore
 dotnet build -warnaserror
-dotnet run --project src/Gfm.Template.Host.Api
+dotnet run --project src/back-end/Gfm.Template.Host.Api
 ```
 
 - Requer Postgres acessível (definir `ConnectionStrings__Default`).
